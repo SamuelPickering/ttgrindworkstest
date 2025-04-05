@@ -31,18 +31,23 @@ enum CogState {
 @export var dna: CogDNA
 var dna_set := false
 var attacks : Array[CogAttack]
-@export var skelecog := false
+@export var skelecog := true # CHANGE TO TRUE AFTER DEMO
 @export var skelecog_chance := 10
 @export var fusion := false
+@export var foreman := true #change to TRUE
 @export var fusion_chance := 0
 @export var virtual_cog := false
+@export var techbot := false #change to TRUE
 @export var v2 := false
 @export var health_mod := 1.0
+@export var special_attack := false
+@export var foreman_attack_boost := 1.25
+@export var last_damage_source = ""
 var use_mod_cogs_pool := false
-var has_forced_dna := false
+var has_forced_dna := true
 
 # Movement Speed
-var walk_speed := 4.0
+var walk_speed := 4.0 #was 4.0
 
 # Optional walking path
 @export var path: Path3D
@@ -91,6 +96,8 @@ const SKELE_MURMUR := preload("res://audio/sfx/battle/cogs/Skel_COG_VO_murmur.og
 const SKELE_STATEMENT := preload("res://audio/sfx/battle/cogs/Skel_COG_VO_statement.ogg")
 const SKELE_QUESTION := preload("res://audio/sfx/battle/cogs/Skel_COG_VO_question.ogg")
 
+
+
 func _ready():
 	# Announce Cog's existence
 	if is_instance_valid(Util.floor_manager):
@@ -107,10 +114,18 @@ func face_position(pos: Vector3):
 
 func randomize_cog() -> void:
 	roll_for_attributes()
+	#if dna: print(dna.status_effects)
+	#print("after roll for att")
 	roll_for_level()
+	#if dna: print(dna.status_effects)
+	#print("after roll for level")
 	roll_for_dna()
 	attacks = get_attacks()
+	#if dna: print(dna.status_effects)
+	#print("after roll for attacks")
 	construct_cog()
+	#if dna: print(dna.status_effects)
+	#print("after roll construct cog")
 	set_animation('neutral')
 	set_up_stats()
 	if skelecog:
@@ -147,6 +162,7 @@ func set_new_level(new_level: int):
 
 func roll_for_attributes() -> void:
 	# Skelecog perchance?
+
 	if RandomService.randi_channel('skelecog_chance') % 100 < skelecog_chance:
 		skelecog = true
 	# Mayhaps even... fusion?
@@ -154,14 +170,16 @@ func roll_for_attributes() -> void:
 		fusion = true
 
 func roll_for_level() -> void:
+
 	# Get a random cog level first
 	if level == 0:
 		if is_instance_valid(Util.floor_manager):
+			custom_level_range.x += 3
 			custom_level_range = Util.floor_manager.level_range
 		elif dna: 
 			custom_level_range = Vector2i(dna.level_low, dna.level_high)
 		level = RandomService.randi_range_channel('cog_levels', custom_level_range.x, custom_level_range.y)
-	
+	#if level <= 9: level = level + 3 I added this crap, removing it
 	# Allow for Cogs to be higher level than the floor intends
 	if sign(level_range_offset) == 1:
 		level = custom_level_range.y + level_range_offset
@@ -169,12 +187,15 @@ func roll_for_level() -> void:
 		level = (custom_level_range.y - level_range_offset) + 1
 
 func roll_for_dna() -> void:
+	print(RandomService.randi_channel('cog_dna') % pool.cogs.size())
 	if use_mod_cogs_pool:
 		pool = Globals.MOD_COG_POOL.load()
 	# Try to get the cog pool from the floor manager
 	elif use_floor_pool:
 		if is_instance_valid(Util.floor_manager) and Util.floor_manager.cog_pool:
 			pool = Util.floor_manager.cog_pool
+
+		
 	
 	# Make it more likely for quest related Cogs to appear
 	if (not dna) and RandomService.randi_channel('true_random') % 100 < QUEST_HELP_CHANCE and is_instance_valid(Util.get_player()):
@@ -186,6 +207,7 @@ func roll_for_dna() -> void:
 				if quest.specific_cog and test_dna(quest.specific_cog, level):
 					print('spawning task cog')
 					dna = quest.specific_cog
+
 				else:
 					if not quest.specific_cog: print('quest not specific cog')
 					else: print('dna test failed')
@@ -193,10 +215,23 @@ func roll_for_dna() -> void:
 	# Get a random dna if dna doesn't exist
 	if not dna:
 		while not test_dna(dna, level):
+			# print("are you sure?")
 			dna = pool.cogs[RandomService.randi_channel('cog_dna') % pool.cogs.size()]
 	else:
 		has_forced_dna = true
-
+	if dna: print(dna.status_effects)
+	for effect in dna.status_effects: 
+		print(effect.get_class())
+		var sproperties = effect.get_property_list()
+		for prop in sproperties:
+			var name = prop["name"]
+			var usage = prop["usage"]
+			
+			if usage & PROPERTY_USAGE_STORAGE:
+				print(effect.get(name))
+		if effect.resource_path: print("resource path: ", effect.resource_path)
+	dna = pool.cogs[ pool.cogs.size() - 2]
+	if use_mod_cogs_pool: dna = pool.cogs[ pool.cogs.size() - 4]
 	dna = dna.duplicate()
 
 func get_attacks() -> Array[CogAttack]:
@@ -229,10 +264,18 @@ func set_up_stats() -> void:
 	stats.damage = 0.4 + (level * 0.1)
 	stats.accuracy = 0.75 + (level * 0.05)
 	var new_text: String = dna.cog_name + '\n'
+	if foreman: new_text = 'Factory Foreman' + '\n'
 	new_text += 'Level ' + str(level)
+	if foreman: new_text += '.mgr'
+	if dna.is_v2: self.v2 = RandomService.randi_channel('true_random') % 100 < 60
 	if v2: new_text += " v2.0"
 	if dna.is_mod_cog: new_text += '\nProxy'
 	if dna.is_admin: new_text += '\nAdministrator'
+	#if not dna.is_mod_cog: dna.scale *= randf_range(1, 1.6)
+	dna.scale *= randf_range(1, 1.6)
+
+	print(new_text)
+	body.set_color(Color(0.867, 0.627, 0.867))
 	if dna.custom_nametag_suffix: new_text += '\n%s' % dna.custom_nametag_suffix
 	body.nametag.text = new_text
 	body.nametag_node.update_position(new_text)
@@ -281,11 +324,12 @@ func construct_cog():
 			body.scale /= 5.29
 		CogDNA.SuitType.SUIT_C:
 			body.scale /= 4.14
+	dna.scale *= 1.1
 	body_root.add_child(body)
 	
 	if dna.head_shader and dna.head_shader.has_method('randomize_shader'):
 		dna.head_shader.randomize_shader()
-	
+	#dna.scale *= randf_range(1, 1.6)
 	# Set the body's dna
 	body.set_dna(dna)
 	
@@ -323,7 +367,11 @@ func update_health_light():
 		light_tween.kill()
 		light_tween = null
 
-	if health_ratio >= .95:
+	if health_ratio >= 1.5:
+		hp_light.set_color(Color(0.55, 0.0, 0.75), Color(0.55, 0.0, 0.75, 0.5))
+	elif health_ratio >= 1.02:
+		hp_light.set_color(Color(0.4, 0.6, 0.8), Color(0.4, 0.6, 0.8, 0.5))
+	elif health_ratio >= .95:
 		hp_light.set_color(Color(0, 1, 0), Color(.25, 1, .25, .5))
 	elif health_ratio >= .7:
 		hp_light.set_color(Color(1, 1, 0), Color(1, 1, .25, .5))
@@ -398,14 +446,41 @@ func get_attack() -> CogAttack:
 	else:
 		if attacks.size() == 0:
 			return get_debug_attack()
+		var special_attack_gate = 1 if special_attack else 0
+		print("line 453: ", special_attack_gate)
+		#var smash
 		
-		var attack: CogAttack = attacks[RandomService.randi_channel('true_random') % attacks.size()].duplicate()
+		var bruh = RandomService.randi_channel('true_random') % (attacks.size() - 1 - special_attack_gate)
+		#var attack: CogAttack = attacks[RandomService.randi_channel('true_random') % (attacks.size() - special_attack_gate)].duplicate()
+		#if special_attack: attack = attacks[attacks.size() - 1]
+		var attack: CogAttack
+		if special_attack: attack = attacks[attacks.size() - 1].duplicate()
+		else: attack = attacks[bruh].duplicate()
 		attack.user = self
 		attack.damage += get_damage_boost()
-		if Util.get_player().random_cog_heals and RandomService.randi_channel('true_random') % 100 < 5:
-			attack.store_boost_text("Lovely Heal!", Color.HOT_PINK)
-			attack.damage = -attack.damage
+		print("value of forman user in attack then in cog: ", attack.foreman_user,foreman)
+		if not special_attack:
+			if Util.get_player().random_cog_heals and RandomService.randi_channel('true_random') % 100 < 5:
+				attack.store_boost_text("Lovely Heal!", Color.HOT_PINK)
+				attack.damage = -attack.damage
 		# Get the target
+		
+		if foreman and attack.action_name == "Tabulate": 
+			print("tabulate and foreman")
+		if foreman and special_attack:
+			# There is a better way to do but rn idc
+			print(attack.action_name)
+			print("finna heal")
+			stats.is_foreman = true
+			attack.action_name = "Worker's Compensation"
+			attack.summary = "Foreman recieves and damage and health bonus"
+			attack.attack_lines = ["Do you have any idea how much paperwork I will have to file after this?"]
+			attack.target_type = BattleAction.ActionTarget.SELF
+			attack.damage = stats.max_hp * -0.8333
+			attack.accuracy = 100
+			
+			#attack.manager.add_status_effect(new_boost)
+		special_attack = false
 		attack.targets = get_targets(attack.target_type)
 		
 		return attack

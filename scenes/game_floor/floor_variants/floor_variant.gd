@@ -20,7 +20,7 @@ const ANOMALIES_NEUTRAL: Array[String] = [
 ]
 const ANOMALIES_NEGATIVE: Array[String] = [
 	"res://scenes/game_floor/floor_modifiers/scripts/anomalies/floor_mod_level_up.gd",
-	"res://scenes/game_floor/floor_modifiers/scripts/anomalies/floor_mod_out_of_touch.gd",
+	#"res://scenes/game_floor/floor_modifiers/scripts/anomalies/floor_mod_out_of_touch.gd",
 ]
 
 const LEVEL_RANGES: Dictionary = {
@@ -28,7 +28,7 @@ const LEVEL_RANGES: Dictionary = {
 	1: [2, 5],
 	2: [3, 7],
 	3: [5, 9],
-	4: [7, 12],
+	4: [9, 11], # was 7 - 12
 	5: [8, 14],
 }
 
@@ -82,7 +82,9 @@ func get_anomalies() -> Array[Script]:
 	var mods: Array[Script] = []
 	
 	# Append a random amount of anomalies to the array
-	var mod_count := RandomService.randi_range_channel('floor_mods', 0, 3)
+	print("REMEMBER IN FLOOR_VARIANT.GD YOU MADE NO ANOMOLIES FOR DEMO")
+	#var mod_count := RandomService.randi_range_channel('floor_mods', 0, 3)
+	var mod_count := 0
 	# Apply potential item anomaly boost
 	if Util.get_player() and Util.get_player().stats and Util.get_player().stats.anomaly_boost != 0:
 		mod_count += Util.get_player().stats.anomaly_boost

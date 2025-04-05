@@ -76,7 +76,14 @@ func get_immunity(cog : Cog) -> bool:
 	var effects := manager.get_statuses_for_target(cog)
 	
 	for effect in effects:
-		if effect is StatusEffectGagImmunity:
+		if effect is StatusEffectGagImmunity: # or StatusEffectGagImmunity2: # lured new cheat
+			print(effect)
+			if effect.track:
+				for gag : ToonAttack in effect.track.gags:
+					if gag.action_name == action_name:
+						return true
+		if effect is StatusEffectGagImmunity2:
+			print("toon attack 86: blah blah")
 			if effect.track:
 				for gag : ToonAttack in effect.track.gags:
 					if gag.action_name == action_name:

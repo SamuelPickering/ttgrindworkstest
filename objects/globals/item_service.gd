@@ -50,6 +50,7 @@ func get_random_item(pool: ItemPool, override_rolls := false) -> Item:
 	var trimmed_pool: Array[Item] = []
 	for item in pool.items:
 		if not item in seen_items:
+			#print("item name: ",item.item_name, "in trimmed")
 			trimmed_pool.append(item)
 	
 	# If no item can be given to the player, just give them treasure

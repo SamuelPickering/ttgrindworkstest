@@ -129,7 +129,20 @@ func complete_turn():
 func sort_gags(gags: Array[ToonAttack]) -> Array[ToonAttack]:
 	if Util.get_player().custom_gag_order:
 		return gags
-	
+	print("battle ui line 132")
+	if(gag_order_menu.panels):
+		#gag_order_menu.panels[0].color = (Color(0.867, 0.627, 0.867))
+		var panel1 = gag_order_menu.panels[0]
+		gag_order_menu.panels[0].self_modulate = Color(0.5, 0.2, 0.2, 1)
+		var children = panel1.get_children()
+		for child in children:
+			print("panel child node: ", child.name)
+		print(gag_order_menu.panels)
+		#if panel.material:
+		#panel.material.set_shader_param("color", Color(0, 1, 0, 1))  # Green
+	#print(gag_order_menu.get_property_list())    var style_box = StyleBoxFlat.new()
+	#style_box.bg_color = Color(0, 0, 1, 1)  # Blue
+	#panel.add_theme_stylebox_override("panel", style_box)
 	var gag_order : Array[ToonAttack] = []
 	var loadout: Array[Track] = Util.get_player().character.gag_loadout.loadout
 	for track in loadout:

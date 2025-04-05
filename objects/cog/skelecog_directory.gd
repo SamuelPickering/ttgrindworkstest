@@ -31,7 +31,8 @@ var color_overlay_mat := ColorOverlayMaterial.new()
 
 func set_dna(dna: CogDNA) -> void:
 	scale *= dna.scale
-	
+	print("in skelecog_directory.gd")
+	print(head_node)
 	# Set up material overrides for every mesh
 	for child in skeleton.get_children():
 		if child is MeshInstance3D:
@@ -56,6 +57,8 @@ func set_dna(dna: CogDNA) -> void:
 	custom_nametag_height = dna.custom_nametag_height
 	dna_set = true
 	s_dna_set.emit()
+	print("in skelecog_directory.gd again")
+	print_head_node_info()
 	
 	for mesh: GeometryInstance3D in color_overlay_meshes:
 		mesh.material_overlay = color_overlay_mat
@@ -76,3 +79,30 @@ func flash_instant(color: Color, time: float = 0.2, strength: float = 0.7) -> vo
 func flash(color: Color, time: float = 0.2, strength: float = 0.7) -> void:
 	if color_overlay_mat:
 		color_overlay_mat.flash(self, color, time, strength)
+		
+func print_head_node_info() -> void:
+	if head_node:
+		print("Head Node Info:")
+		print("Name: ", head_node.name)
+		print("Type: ", head_node.get_class())
+		head_node.get_path_to(head_node)
+		head_node.print_tree_pretty()
+		print("head's parent node:")
+		print(head_node.get_parent_node_3d())
+		print("head_node path: ")
+		print(head_node.get_path())
+		if head_node.has_method("get_scene_file_path"):
+			var scene_path = head_node.get_scene_file_path()
+			if scene_path:
+				print("Scene File: ", scene_path)
+			else:
+				print("Scene File: (Not saved as separate scene)")
+		
+		if head_node is MeshInstance3D:
+			var mesh = head_node.mesh
+			if mesh:
+				print("Mesh Resource: ", mesh.resource_path)
+			else:
+				print("No mesh assigned")
+	else:
+		print("No head_node assigned")

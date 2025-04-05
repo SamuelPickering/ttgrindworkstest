@@ -442,7 +442,7 @@ func on_floor_start(game_floor: GameFloor) -> void:
 		s_secret_floor.emit()
 
 const MaxToonupConsumables := 3
-
+var fore_cog_index = 0
 
 #region Global Signals
 signal s_game_paused(pause_menu)

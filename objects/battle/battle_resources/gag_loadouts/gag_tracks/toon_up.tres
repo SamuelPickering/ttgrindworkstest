@@ -26,6 +26,7 @@ mini_icon_scale = 1.0
 visible = true
 description = "This is a Status Effect"
 status_name = "Status Effect"
+is_foreman_effect = false
 id = 0
 
 [sub_resource type="Resource" id="Resource_654rw"]
@@ -53,6 +54,7 @@ mini_icon_scale = 1.0
 visible = true
 description = "This is a Status Effect"
 status_name = "Status Effect"
+is_foreman_effect = false
 id = 0
 
 [sub_resource type="Resource" id="Resource_f160u"]
@@ -91,6 +93,7 @@ mini_icon_scale = 1.0
 visible = true
 description = "This is a Status Effect"
 status_name = "Status Effect"
+is_foreman_effect = false
 id = 0
 
 [sub_resource type="Resource" id="Resource_n8qmn"]
@@ -118,6 +121,7 @@ mini_icon_scale = 1.0
 visible = true
 description = "20% Laff Regeneration"
 status_name = "Status Effect"
+is_foreman_effect = false
 id = 0
 
 [sub_resource type="Resource" id="Resource_l5wod"]
@@ -145,6 +149,7 @@ mini_icon_scale = 1.0
 visible = true
 description = "This is a Status Effect"
 status_name = "Status Effect"
+is_foreman_effect = false
 id = 0
 
 [sub_resource type="Resource" id="Resource_bci3h"]

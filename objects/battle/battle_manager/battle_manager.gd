@@ -15,13 +15,14 @@ const CRIT_SFX: Array = [CRIT_SFX_1, CRIT_SFX_2, CRIT_SFX_3, CRIT_SFX_4]
 @onready var scene_timer := $SceneTimer
 @onready var attack_label := $AttackLabel
 @onready var summary_label := $SummaryLabel
-
+@onready var selected_panels := %SelectedGags
 ## Locals
 var player = Util.get_player()
 var cogs: Array[Cog]
 var battle_node: BattleNode
 var battle_ui: BattleUI
 var round_actions: Array[BattleAction] = []
+var round_mid_actions: Array[BattleAction] = []
 var round_end_actions : Array[BattleAction] = []
 var current_action: BattleAction
 var battle_stats: Dictionary = {}
@@ -35,12 +36,14 @@ var illegal_moves : Array[Script] = []
 var boss_battle := false
 var current_round := 0
 var has_moved : Array[Node3D] = []
+var bellow = false
 
 ## Signals
 signal s_focus_char(character: Node3D)
 signal s_battle_ended
 signal s_battle_ending
 signal s_round_started(actions: Array[BattleAction])
+signal s_gags_chosen(actions: Array[ToonAttack])
 signal s_round_ended
 signal s_actions_ended
 signal s_participant_will_die(participant: Node3D)
@@ -51,6 +54,7 @@ signal s_status_effect_added(effect: StatusEffect)
 signal s_action_added(action: BattleAction)
 signal s_action_finished(action: BattleAction)
 signal s_ui_initialized
+signal s_gag_modified(indexes: Array) # idk man %5
 
 func start_battle(cog_array: Array[Cog], battlenode: BattleNode):
 	cogs = cog_array
@@ -74,6 +78,8 @@ func start_battle(cog_array: Array[Cog], battlenode: BattleNode):
 			var add_eff := effect.duplicate()
 			add_eff.target = cog
 			add_status_effect(add_eff)
+			if add_eff.has_signal("s_gag_modified"): #idk man #5%
+				add_eff.s_gag_modified.connect(_on_gag_modified)
 	
 	BattleService.battle_started(self)
 	
@@ -81,12 +87,21 @@ func start_battle(cog_array: Array[Cog], battlenode: BattleNode):
 	add_child(battle_ui)
 	s_ui_initialized.emit()
 
+func _on_gag_modified(indexes: Array) -> void:
+	print("Gag modified by Damage Drift:", indexes)
+	s_gag_modified.emit(indexes) 
+
 func append_action(action: BattleAction):
 	round_actions.append(action)
 	s_action_added.emit(action)
 
+
 func gags_selected(gags: Array[ToonAttack]):
+	s_gags_chosen.emit(gags)
+	print(battle_ui.selected_gags)
+	print("lets see if event ran")
 	for gag in gags:
+		print(gag.damage)
 		append_action(gag)
 	begin_turn()
 
@@ -98,31 +113,42 @@ func revert_battle_speed() -> void:
 	Engine.time_scale = 1.0
 
 func begin_turn():
+	bellow = false
 	# Hide Battle UI
 	battle_ui.hide()
 	apply_battle_speed()
 	current_round += 1
-	# Inject partner moves before player's
-	for partner in Util.get_player().partners:
-		inject_battle_action(partner.get_attack(), 0)
+
 	# Get actions from every Cog
 	for cog in cogs:
 		for i in cog.stats.turns:
 			var attack := get_cog_attack(cog)
 			if not attack == null:
-				append_action(attack)
+				if cog.techbot:
+					print("techy")
+					inject_battle_action(attack, 0)
+				else: append_action(attack)	
+
+	# Inject partner moves before player's  # and after techbots
+	for partner in Util.get_player().partners:
+		inject_battle_action(partner.get_attack(), 0)
 	s_round_started.emit(round_actions)
 	await run_actions()
 	round_over()
 
 ## Runs the currently queuedbattle actions
 func run_actions():
+
 	# Iterate through batte actions
 	while not round_actions.is_empty():
 		await Task.delay(0.05)
 		current_action = round_actions.pop_front()
 		if current_action == null:
 			continue
+		print("curr action")
+		print(current_action)
+		print("action array:")
+		print(round_actions)
 		if current_action is CogAttack:
 			if not current_action.action_name == "" :
 				show_action_name(current_action.action_name + "!",current_action.summary)
@@ -138,7 +164,6 @@ func run_actions():
 			s_action_finished.emit(current_action)
 			BattleService.s_action_finished.emit(current_action)
 			battle_node.face_forward()
-
 	current_action = null
 
 # Removes dead battle participant
@@ -152,10 +177,24 @@ func someone_died(who: Node3D) -> void:
 	# Remove from cog array if is cog
 	if who is Cog and who in cogs:
 		cogs.remove_at(cogs.find(who))
+
+	for i in range(cogs.size() - 1, -1, -1):
+		var cog = cogs[i]
+		await force_unlure(cog)
+		cog.special_attack = true
+		var attack := get_cog_attack(cog)
+		cog.special_attack = false
+		if not attack == null:
+			if round_actions.size() > 0: inject_battle_action(attack, 0)
+			else : inject_end_battle_action(attack, 0)
+
+
 	
 	var check_arrays := [round_actions, round_end_actions]
 	
 	for arr: Array in check_arrays.duplicate():
+		print("round actions after whatever this shit is on line 225 bm")
+		print(round_actions)
 		var arr_dup := arr.duplicate()
 		for i in range(arr_dup.size() - 1, -1, -1):
 			var action = arr_dup[i]
@@ -169,12 +208,14 @@ func someone_died(who: Node3D) -> void:
 
 	# Scrub status effects for the Someone in question
 	for status: StatusEffect in get_statuses_for_target(who):
+		if status.on_death:
+			print("bm line 233 now doing status on death:")
+			status.on_death()
 		scrub_status_effect(status)
 		if not status.target:
 			status_effects.erase(status)
 			status.cleanup()
 			continue
-
 	s_participant_will_die.emit(who)
 
 func kill_someone(who: Node3D, signal_only := false) -> void:
@@ -202,15 +243,24 @@ func round_over():
 	
 	# Run status effects
 	await renew_status_effects()
-	
+	print("in round over")
+	print(round_end_actions)
+	print(round_actions)
 	if not round_end_actions.is_empty():
-		round_actions.assign(round_end_actions)
+		print("IS this running? bm 286")
+		if not round_actions.is_empty(): #round_actions.assign(round_end_actions)
+			round_actions.append(round_end_actions)
+			print("there was stuff in round_actions")
+		else: 
+			round_actions.assign(round_end_actions)
+			print("the else in bm 295 ran")
+			print(round_actions)
 		round_end_actions.clear()
 		await run_actions()
 
 	# Final check for all cog hp
 	await check_pulses(cogs)
-
+	#await run_actions()
 	revert_battle_speed()
 
 	if cogs.size() == 0:
@@ -366,6 +416,7 @@ func affect_target(target: Node3D, amount: float, ignore_current_action := false
 	else:
 		battle_text(target, string, Color('ff0000'), Color('7a0000'), raise_height)
 
+
 	# Play boost text if we have any stored on this action
 	if current_action and current_action.stored_boost_text:
 		for boost_text_arr: Array in current_action.stored_boost_text:
@@ -409,14 +460,19 @@ func get_damage(damage: float, action: BattleAction, target: Node3D) -> int:
 		var user_stats: PlayerStats = battle_stats[user]
 		if action is GagLure:
 			boosted_damage *= user_stats.gag_effectiveness['Trap']
+			target.last_damage_source = 'Trap'
 		elif action is GagSound:
 			boosted_damage *= user_stats.gag_effectiveness['Sound']
+			target.last_damage_source = 'Sound'
 		elif action is GagThrow:
 			boosted_damage *= user_stats.gag_effectiveness['Throw']
+			target.last_damage_source = 'Throw'
 		elif action is GagSquirt:
 			boosted_damage *= user_stats.gag_effectiveness['Squirt']
+			target.last_damage_source = 'Squirt'
 		elif action is DropBig or action is DropSmall:
 			boosted_damage *= user_stats.gag_effectiveness['Drop']
+			target.last_damage_source = 'Drop'
 
 		if target is Cog:
 			# Mod cog dmg boost
@@ -615,19 +671,32 @@ func force_unlure(target: Cog) -> void:
 	target.lured = false
 	target.stunned = false
 	var lure_effect: StatusLured
+	var foundlurestatus
 	for i in range(status_effects.size() - 1, -1, -1):
 		var effect = status_effects[i]
 		if effect is StatusLured and target == effect.target:
-			effect.target = null
+			#effect.target = null
+			#expire_status_effect(e)
 			lure_effect = effect
 	if not lure_effect:
 		return
 	if target.stats.hp > 0 and lure_effect.lure_type == StatusLured.LureType.STUN and not target in has_moved:
 		unskip_turn(target)
+	if lure_effect:
+		if lure_effect.lure_type == lure_effect.LureType.DAMAGE_DOWN:
+			battle_stats[lure_effect.target].damage *= (1 / lure_effect.damage_nerf)
+			lure_effect.target = null
+			
+		
 
 func unskip_turn(who: Actor) -> void:
 	if who is Cog:
 		var cog_index := cogs.find(who)
+		if bellow:
+			for i in who.stats.turns:
+				append_action(get_cog_attack(who))
+			print("bellow in unskip")
+			return
 		var action_index : int
 		for i in round_actions.size():
 			if cog_index > 0 and round_actions[i].user == cogs[cog_index - 1]:
@@ -657,6 +726,7 @@ func get_cog_attack(cog: Cog) -> CogAttack:
 	# Illegalize one_time_use attacks
 	if cog_attack and cog_attack.one_time_use:
 		illegal_moves.append(cog_attack.get_script())
+	#print("line 680 bm,the cog:", cog, cog.stats.max_hp) %5  print not needed
 	return cog_attack
 
 func knockback_cog(cog : Cog) -> void:
@@ -734,11 +804,24 @@ func create_v2_cog(cog: Cog) -> Cog:
 	new_cog.skelecog_chance = 0
 	new_cog.level = cog.level - 1
 	new_cog.skelecog = true
+	#cog.dna.is_v2 = false
 	new_cog.dna = cog.dna
+	#new_cog.v2 = false
 	battle_node.add_child(new_cog)
 	new_cog.global_transform = cog.global_transform
 	new_cog.battle_start()
 	new_cog.hide()
+	new_cog.v2 = false
 	add_cog(new_cog)
 	Task.delay(6.0).connect(new_cog.show)
 	return new_cog
+	
+func inject_end_battle_action(battle_action : BattleAction,position : int):
+		print("Action injected in end rounds")
+		round_end_actions.insert(position,battle_action)
+		s_action_added.emit(battle_action)
+
+func append_end_action(action: BattleAction):
+	round_end_actions.append(action)
+	s_action_added.emit(action)
+	

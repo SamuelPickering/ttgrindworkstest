@@ -286,11 +286,14 @@ func set_selected_toon(character: PlayerCharacter) -> void:
 
 var toons_created := false
 func new_game_pressed() -> void:
-	middle_buttons.hide()
-	state = MenuState.TOON_SELECT
-	if not toons_created:
-		create_toons()
-		toons_created = true
+	var first_character = Globals.TOON_UNLOCK_ORDER[0].duplicate(true)
+	begin_game(first_character, false)
+	# Acutal game logic:
+	#middle_buttons.hide()
+	#state = MenuState.TOON_SELECT
+	#if not toons_created:
+	#	create_toons()
+	#	toons_created = true
 
 func back_pressed() -> void:
 	if not middle_buttons.visible:

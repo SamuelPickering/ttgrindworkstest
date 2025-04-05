@@ -44,6 +44,7 @@ enum SuitType {
 @export var is_mod_cog := false
 @export var is_admin := false
 @export var health_mod := 1.0
+@export var is_v2 = false # please remove after demonstration
 
 @export_multiline var battle_phrases: Array[String] = ["We are gonna fight now."]
 @export var battle_start_movie: BattleStartMovie

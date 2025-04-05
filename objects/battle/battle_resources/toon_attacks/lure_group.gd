@@ -72,6 +72,7 @@ func action():
 				continue
 			elif get_immunity(target):
 				manager.battle_text(target, "IMMUNE")
+				target.speak("Nah")
 				continue
 			manager.battle_text(target, "Damage Down!", BattleText.colors.orange[0], BattleText.colors.orange[1])
 			if cog_anim == 'landing':

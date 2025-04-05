@@ -30,6 +30,7 @@ status_effects = Array[ExtResource("5_45evg")]([])
 is_mod_cog = false
 is_admin = false
 health_mod = 1.0
+is_v2 = false
 battle_phrases = Array[String](["I'm ready to rock and roll your end credits.", "Today the role of defeated Toon will be played by - YOU!", "Lights, camera, action!", "I told you not to call me.", "Are you ready for your final scene?", "I hope you don't forget your lines.", "This scene will go on the cutting room floor.", "There's no business like it!", "Let's start rolling."])
 external_assets = {
 &"head_model": "",

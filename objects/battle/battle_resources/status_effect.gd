@@ -23,6 +23,7 @@ enum EffectQuality {
 @export var visible := true
 @export var description := "This is a Status Effect"
 @export var status_name := "Status Effect"
+@export var is_foreman_effect := false
 var target: Actor
 var manager: BattleManager
 
@@ -40,6 +41,9 @@ func expire():
 
 ## Called by the battle manager when the effect is cleaning up from the battle.
 func cleanup() -> void:
+	pass
+
+func on_death() -> void:
 	pass
 
 func get_description() -> String:
