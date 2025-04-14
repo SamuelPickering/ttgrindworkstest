@@ -15,7 +15,7 @@ signal s_game_lost
 
 
 func start_game() -> void:
-	timer = Util.run_timer(game_time)
+	timer = Util.run_timer(game_time) # ADD THIS baCK AFTER TESTIN 
 	timer.s_timeout.connect(game_lost)
 	game_active = true
 	game_valid = false

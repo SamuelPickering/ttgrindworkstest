@@ -39,10 +39,12 @@ signal s_floor_number_changed
 
 var floor_type : DepartmentFloor
 var window_focused := true
+var battlesonfloor = 0
 
 var floor_number := -1:
 	set(x):
 		floor_number = x
+		battlesonfloor = 0
 		s_floor_number_changed.emit()
 
 func get_player() -> Player:

@@ -21,6 +21,7 @@ signal s_turn_complete(gag_order: Array[ToonAttack])
 signal s_gag_canceled(gag: BattleAction)
 signal s_gags_updated(gags: Array[ToonAttack])
 signal s_update_toonups
+signal s_damage_drifted(dict: Dictionary)
 
 # Locals
 var turn := 0:
@@ -32,6 +33,7 @@ var remaining_turns: int:
 		return Util.get_player().stats.turns - turn
 var selected_gags: Array[ToonAttack] = []
 var fire_action: ToonAttackFire
+var drift_effect_dict = {}
 
 func _ready():
 	refresh_turns()
@@ -45,6 +47,7 @@ func _ready():
 	check_pink_slips()
 
 	status_container.target = Util.get_player()
+	%SelectedGags.s_gag_canceled.connect(cancel_gag)
 
 func gag_selected(gag: BattleAction) -> void:
 	if remaining_turns <= 0:
@@ -133,7 +136,6 @@ func sort_gags(gags: Array[ToonAttack]) -> Array[ToonAttack]:
 	if(gag_order_menu.panels):
 		#gag_order_menu.panels[0].color = (Color(0.867, 0.627, 0.867))
 		var panel1 = gag_order_menu.panels[0]
-		gag_order_menu.panels[0].self_modulate = Color(0.5, 0.2, 0.2, 1)
 		var children = panel1.get_children()
 		for child in children:
 			print("panel child node: ", child.name)

@@ -24,27 +24,38 @@ func apply() -> void:
 		var stats : BattleStats = manager.battle_stats[cog]
 		stats.damage *= damage_nerf
 	
-	description = "Knockback Damage: %d" % knockback_effect + " \n damage nerf: %d%% Damage Down" % damage_nerf
+	description = "Knockback Damage: %d" % knockback_effect
+	if lure_type == LureType.DAMAGE_DOWN: description += "\ndamage nerf: 50% Damage Down"
 
 func expire() -> void:
+	if target.lured:
+		var walk_tween := create_walk_tween()
+		await walk_tween.finished
+		walk_tween.kill()
 	target.lured = false
-	var walk_tween := create_walk_tween()
-	await walk_tween.finished
-	walk_tween.kill()
 	if lure_type == LureType.DAMAGE_DOWN:
 		manager.battle_stats[target].damage *= (1 / damage_nerf)
 	else:
-		target.stunned = false
 		print("manager.bellow: " )
-		if manager.bellow:
+		if manager.bellow and target.stunned:
+			target.stunned = false
+			print(" in lured gd  41 BELLLOW?!!!!!!!!!")
 			var attack = manager.get_cog_attack(target)
 			manager.append_action(attack)
 			return
-		manager.unskip_turn(target)
-		print("in lured, ARE U TELLING ME THIS DOESN'T RUN?")
-		await manager.run_actions()
-		print("in lured, bruh there aint no way")
+		if target.stunned:
+			target.stunned = false
+			manager.unskip_turn(target)
+			print("in lured, ARE U TELLING ME THIS DOESN'T RUN?")
+			await manager.run_actions()
+			print("in lured, bruh there aint no way")
+		print("idk bro")
+		
 
+func ts_pmo() -> void:
+	var walk_tween := create_walk_tween()
+	await walk_tween.finished
+	walk_tween.kill()
 func create_walk_tween() -> Tween:
 	var cog: Cog = target
 	var battle_node = manager.battle_node

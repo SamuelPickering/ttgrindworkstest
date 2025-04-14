@@ -29,7 +29,7 @@ func get_random_item(pool: ItemPool, override_rolls := false) -> Item:
 	## Rolls to force progression items when they're needed:
 	if not override_rolls:
 		# Gag roll
-		var gag_roll := RandomService.randf_channel("gag_rolls")
+		var gag_roll := RandomService.randf_channel("gag_rolls") * 0.94
 		print('Gag rate is ' + str(get_gag_rate()) + ' Gag roll is ' + str(gag_roll))
 		if gag_roll < get_gag_rate():
 			print('Forcing gag spawn')
@@ -40,7 +40,7 @@ func get_random_item(pool: ItemPool, override_rolls := false) -> Item:
 		if laff_roll < get_laff_rate():
 			print('Forcing laff spawn')
 			return load('res://objects/items/resources/passive/laff_boost.tres')
-		var bean_roll := RandomService.randf_channel("bean_rolls")
+		var bean_roll := RandomService.randf_channel("bean_rolls") * 1.1
 		print('Bean rate is %f and bean roll is %f' % [get_bean_rate(), bean_roll])
 		if bean_roll < get_bean_rate():
 			print('Forcing bean spawn')
@@ -71,6 +71,7 @@ func get_random_item(pool: ItemPool, override_rolls := false) -> Item:
 	# Include Q7: 26.2%
 	# If a low rarity is drawn that has no items available, there is a continuous 50% chance to upgrade to the next rarity.
 	# If this fails, a random treasure will be given to the player instead.
+	print(seen_items)
 	while RandomService.randi_channel('item_quality_roll') % 100 < 80 and rarity_goal < Item.Rarity.values().max():
 		rarity_goal += 1
 
@@ -176,9 +177,9 @@ func apply_inventory() -> void:
 const GagGoals: Dictionary = {
 	1: 0.2,
 	2: 0.35,
-	3: 0.5,
-	4: 0.7,
-	5: 0.9,
+	3: 0.60, # was 0.5 making it 0.66
+	4: 0.80, # was 0.7 making it 0.85
+	5: 0.92,
 	6: 1.0,
 }
 
@@ -223,7 +224,7 @@ func get_gag_rate() -> float:
 	return chance
 
 const STARTING_LAFF := 30
-const FLOOR_LAFF_INCREMENT := 14
+const FLOOR_LAFF_INCREMENT := 17 # was 14
 const LIKELIHOOD_PER_POINT := 0.1
 func get_laff_rate() -> float:
 	if not is_instance_valid(Util.get_player()):
@@ -260,7 +261,7 @@ func get_bean_rate() -> float:
 	
 	var goal_diff := BEAN_GOAL - bean_total
 	
-	var bean_rate := clampf(goal_diff * LIKELIHOOD_PER_BEAN, 0.0, 0.25)
+	var bean_rate := clampf(goal_diff * LIKELIHOOD_PER_BEAN, 0.0, 0.25) * 0.8
 	
 	return bean_rate
 

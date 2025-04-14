@@ -101,7 +101,7 @@ func generate_floor() -> void:
 	var total_battles := int(total_rooms * battle_ratio)
 	rooms_remaining = [total_battles, total_rooms - total_battles]
 
-	if floor_rooms.special_rooms and RandomService.randf_channel('room_logic') > 0.8:
+	if floor_rooms.special_rooms and RandomService.randf_channel('room_logic') > 0.001: # was 0.8 guarantted special room
 		# 50% chance to add a "special room" to the pool
 		var sr_idx := RandomService.randi_range_channel('room_logic', 1, floor_rooms.special_rooms.size()) - 1
 		print('Adding special room: %s' % floor_rooms.special_rooms[sr_idx].room.get_state().get_node_name(0))
@@ -131,6 +131,8 @@ func generate_floor() -> void:
 		player = load("res://objects/player/player.tscn").instantiate()
 		SceneLoader.add_persistent_node(player)
 	player.s_fell_out_of_world.connect(player_out_of_bounds)
+	player.stats.quest_rerolls = 4
+	print("in floor gd making quest rerolls equal to 4", player.stats.quest_rerolls)
 	
 	player.global_position = entrance.get_node('SPAWNPOINT').global_position
 	player.state = Player.PlayerState.WALK

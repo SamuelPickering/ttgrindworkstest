@@ -292,13 +292,15 @@ func get_mod_cog_chance() -> float:
 	var test : CogPool = Globals.GRUNT_COG_POOL.load()
 
 	var floor_num := Util.floor_number
-	var max_mod_cogs := mini(roundi(floor_num * 0.75), 3)
+	#var max_mod_cogs := mini(roundi(floor_num * 0.75), 3)
+	var max_mod_cogs :=  3 * (floor_num + 1)
 	if mod_cogs >= max_mod_cogs:
 		return 0.0
 	
-	var chance := (floor_num * 0.075)
+	var chance := (floor_num * 0.075 * 1.5)
 	if Util.get_player() and not is_equal_approx(Util.get_player().stats.proxy_chance_boost, 0.0):
 		chance += Util.get_player().stats.proxy_chance_boost
+	print("are proxies a thing?", chance)
 	return chance
 
 

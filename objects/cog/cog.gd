@@ -6,7 +6,7 @@ signal s_dna_set
 ## Constants
 const VIRTUAL_COG_COLOR := Color('ff0000cc')
 const COMMON_LEVEL_RANGE := Vector2i(1, 12)
-const QUEST_HELP_CHANCE := 20
+const QUEST_HELP_CHANCE := 45
 
 ## For flying in and out
 const PROP_PROPELLER := preload('res://objects/props/etc/cog_propeller.tscn')
@@ -23,6 +23,7 @@ enum CogState {
 @export_range(0, 20) var level: int
 @export var custom_level_range := Vector2i(1, 12)
 @export var level_range_offset := 0
+@export var level_rebalance := 0
 @export var stats: BattleStats
 @export var pool: CogPool
 @export var use_floor_pool := true
@@ -31,20 +32,21 @@ enum CogState {
 @export var dna: CogDNA
 var dna_set := false
 var attacks : Array[CogAttack]
-@export var skelecog := true # CHANGE TO TRUE AFTER DEMO
+@export var skelecog := false # CHANGE TO TRUE AFTER DEMO
 @export var skelecog_chance := 10
 @export var fusion := false
-@export var foreman := true #change to TRUE
+@export var foreman := false #change to TRUE
 @export var fusion_chance := 0
 @export var virtual_cog := false
 @export var techbot := false #change to TRUE
 @export var v2 := false
+@export var v1_5 := false
 @export var health_mod := 1.0
 @export var special_attack := false
 @export var foreman_attack_boost := 1.25
 @export var last_damage_source = ""
 var use_mod_cogs_pool := false
-var has_forced_dna := true
+var has_forced_dna := false
 
 # Movement Speed
 var walk_speed := 4.0 #was 4.0
@@ -68,6 +70,7 @@ var light_tween: Tween
 
 # Head position
 var head_node: Node3D
+var test_head: Node3D
 
 # Battle values
 var lured := false
@@ -103,8 +106,11 @@ func _ready():
 	if is_instance_valid(Util.floor_manager):
 		Util.floor_manager.s_cog_spawned.emit(self)
 	print("running randomize cog")
+	if foreman:
+		has_forced_dna =true
 	# Create a Cog based on the game's current parameters
 	randomize_cog()
+	
 
 func face_position(pos: Vector3):
 	var face_pos := Vector3(pos.x, global_position.y, pos.z)
@@ -179,6 +185,9 @@ func roll_for_level() -> void:
 		elif dna: 
 			custom_level_range = Vector2i(dna.level_low, dna.level_high)
 		level = RandomService.randi_range_channel('cog_levels', custom_level_range.x, custom_level_range.y)
+		print("level pre re balance line: ", level)
+		level += level_rebalance
+		print("level after rebalance line: ", level)
 	#if level <= 9: level = level + 3 I added this crap, removing it
 	# Allow for Cogs to be higher level than the floor intends
 	if sign(level_range_offset) == 1:
@@ -230,12 +239,15 @@ func roll_for_dna() -> void:
 			if usage & PROPERTY_USAGE_STORAGE:
 				print(effect.get(name))
 		if effect.resource_path: print("resource path: ", effect.resource_path)
-	dna = pool.cogs[ pool.cogs.size() - 2]
-	if use_mod_cogs_pool: dna = pool.cogs[ pool.cogs.size() - 4]
+	if foreman: 
+		dna = pool.cogs[ pool.cogs.size() - 2]
+		skelecog = true
+	#if use_mod_cogs_pool: dna = pool.cogs[ pool.cogs.size() - 4]
 	dna = dna.duplicate()
 
 func get_attacks() -> Array[CogAttack]:
 	var atk: Array[CogAttack] = []
+	#I edited this!
 	atk = dna.attacks
 	return atk
 
@@ -275,7 +287,7 @@ func set_up_stats() -> void:
 	dna.scale *= randf_range(1, 1.6)
 
 	print(new_text)
-	body.set_color(Color(0.867, 0.627, 0.867))
+	if foreman: body.set_color(Color(0.867, 0.627, 0.867))
 	if dna.custom_nametag_suffix: new_text += '\n%s' % dna.custom_nametag_suffix
 	body.nametag.text = new_text
 	body.nametag_node.update_position(new_text)
@@ -346,6 +358,9 @@ func construct_cog():
 		body.set_color(VIRTUAL_COG_COLOR)
 	
 	head_node = body.head_node
+	head_node.scale = Vector3(0.5, 0.5, 0.5)
+	#test_head = body.head_cone
+	#dna.head = body.head_node
 
 	dna_set = true
 	s_dna_set.emit()
@@ -449,8 +464,9 @@ func get_attack() -> CogAttack:
 		var special_attack_gate = 1 if special_attack else 0
 		print("line 453: ", special_attack_gate)
 		#var smash
-		
-		var bruh = RandomService.randi_channel('true_random') % (attacks.size() - 1 - special_attack_gate)
+		var bruh
+		if foreman: bruh = RandomService.randi_channel('true_random') % (attacks.size() - 1 - special_attack_gate)
+		else: bruh = RandomService.randi_channel('true_random') % (attacks.size())
 		#var attack: CogAttack = attacks[RandomService.randi_channel('true_random') % (attacks.size() - special_attack_gate)].duplicate()
 		#if special_attack: attack = attacks[attacks.size() - 1]
 		var attack: CogAttack
@@ -458,7 +474,6 @@ func get_attack() -> CogAttack:
 		else: attack = attacks[bruh].duplicate()
 		attack.user = self
 		attack.damage += get_damage_boost()
-		print("value of forman user in attack then in cog: ", attack.foreman_user,foreman)
 		if not special_attack:
 			if Util.get_player().random_cog_heals and RandomService.randi_channel('true_random') % 100 < 5:
 				attack.store_boost_text("Lovely Heal!", Color.HOT_PINK)

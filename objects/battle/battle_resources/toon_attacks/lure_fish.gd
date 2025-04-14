@@ -45,7 +45,7 @@ func action():
 	var hit := manager.roll_for_accuracy(self) and not get_immunity(target)
 	
 	# If hit, make cog reach for dollar
-	if hit:
+	if hit and not target.v1_5:
 		target.set_animation('walknreach')
 		manager.battle_text(target, "Stunned!", BattleText.colors.orange[0], BattleText.colors.orange[1])
 		await target.animator.animation_finished

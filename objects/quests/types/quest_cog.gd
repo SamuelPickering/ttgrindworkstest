@@ -59,6 +59,15 @@ func randomize_objective() -> void:
 	var minimum_level := maxi(1, min(4, Util.floor_number + 1))
 	var maximum_level := maxi(2, min(7, Util.floor_number + 3))
 	
+	if Util.floor_number > 3:
+		print("rolling quest for floor 4+!")
+		if quest_type == 1:
+			quest_type = 2
+			print("changed quest to 2 imao")
+		if quest_type == 0:
+			goal_dept = CogDNA.CogDept.SELL
+			print("you must kill sellbots in quest")
+			
 	
 	# 33% chance of department specific
 	if quest_type == 0:
@@ -79,7 +88,7 @@ func randomize_objective() -> void:
 	
 	# Reduce quotas for more specific quest types
 	if not department == CogDNA.CogDept.NULL:
-		quotaf /= 2.0
+		quotaf /= 3.0
 	elif specific_cog:
 		quotaf /= 4.0
 	

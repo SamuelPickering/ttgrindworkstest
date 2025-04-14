@@ -36,10 +36,37 @@ func randomize_track() -> void:
 		return
 	
 	track = hat[RandomService.randi_channel('gag_frames') % hat.size()]
-	
+	get_better_track()
 	# Store the track in the item resource
 	resource.arbitrary_data['track'] = track
+func get_better_track() -> void:
+	var loadout = Util.get_player().stats.gags_unlocked
+	if Util.floor_number == 3:
+		if Util.battlesonfloor > 3 and loadout['Throw'] < 5:
+			track = 'Throw'
+			print("forced Throw")
+			return
+	if Util.floor_number >= 3:
+		if track == "Sound" and loadout["Sound"] >= 5:
+			var lowest_gag = get_min_gag_unlocked()
+			if lowest_gag != "":
+				print("traded sound frame for lowest gag")
+				track = lowest_gag
 
+
+func get_min_gag_unlocked() -> String:
+	var min_key: String = ""
+	var min_value: int = 999  
+	var gag_loadout = Util.get_player().stats.gags_unlocked
+	for key in gag_loadout:
+		var current_value = gag_loadout[key]
+		if current_value < min_value:
+			min_value = current_value
+			min_key = key
+	print(" track frame 62: minimum gag: ", min_key)
+	return min_key
+	
+	return min_key			
 func get_color() -> Color:
 	if get_track(track):
 		return get_track(track).track_color

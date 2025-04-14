@@ -43,6 +43,7 @@ max_turns = 3
 max_hp = 25
 hp = 25
 turns = 1
+is_foreman = false
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kprq4"]
 load_path = "res://.godot/imported/desat_shorts_10_2.png-006293ca57932ca262d7592d1c1d61cb.ctex"
@@ -185,6 +186,7 @@ max_turns = 3
 max_hp = 1000
 hp = 1000
 turns = 3
+is_foreman = false
 
 [node name="BattleTest" type="Node3D"]
 

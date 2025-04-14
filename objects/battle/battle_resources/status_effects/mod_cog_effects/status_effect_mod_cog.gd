@@ -15,7 +15,8 @@ const MOD_EFFECTS : Array[StatusEffect] = [
 
 func apply() -> void:
 	if not MOD_EFFECTS.is_empty():
-		var mod_effect: StatusEffect = (MOD_EFFECTS.pick_random()).duplicate()
+		var mod_effect: StatusEffect = RandomService.array_pick_random('mod_cog_effects', MOD_EFFECTS).duplicate()
+		#var mod_effect: StatusEffect = (MOD_EFFECTS.pick_random()).duplicate() #wrong
 		mod_effect.target = target
 		#print("mod effect:")
 		#print(mod_effect)

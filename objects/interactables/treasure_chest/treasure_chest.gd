@@ -10,8 +10,12 @@ var SFX_OPEN := LazyLoader.defer("res://audio/sfx/misc/diving_treasure_pick_up.o
 
 @export var item_pool: ItemPool
 @export var scripted_progression := false
+@export var scripted_rebalance := false
+# res://objects/items/resources/accessories/backpacks/gag_pack.tres
 
 const EXTRA_TURN := preload(ExtraTurnItem.BASE_ITEM)
+#const EXTRA_TURN := preload("res://objects/items/resources/accessories/backpacks/gag_pack.tres") works
+#var EXTRA_TURN := load("res://objects/items/resources/accessories/backpacks/gag_pack.tres") also works
 const POINT_BOOST := preload(PointBoostItem.BASE_ITEM)
 var LAFF_BOOST := load("res://objects/items/resources/passive/laff_boost.tres")
 var SCRIPTED_PROGRESSION_ITEMS: Dictionary = {
@@ -56,6 +60,28 @@ func assign_item(world_item: WorldItem):
 			scripted_item.stats_add['hp'] = 8
 		world_item.item = scripted_item
 		return
+	if scripted_rebalance:
+		print("Scripted Rebalance!")
+		if Util.floor_number == 0:
+			world_item.item = load("res://objects/items/resources/accessories/glasses/monocle.tres")
+			return
+		if Util.floor_number == 1:
+			world_item.item = load("res://objects/items/resources/accessories/hats/heart_headband.tres")
+			return
+		if Util.floor_number == 2:
+			world_item.item = load("res://objects/items/resources/accessories/hats/miner_hat.tres")
+			return
+		if Util.floor_number == 3:
+			#world_item.item = load("res://objects/items/resources/accessories/hats/rainbow_wig.tres")
+			world_item.item = load("res://objects/items/resources/accessories/backpacks/wood_sword.tres")
+			#res://objects/items/resources/accessories/hats/pilot_hat.tres
+			return
+		if Util.floor_number == 4:
+			world_item.item = load("res://objects/items/resources/accessories/backpacks/small_pouch.tres")
+			return
+		if Util.floor_number == 5:
+			world_item.item = load("res://objects/items/resources/accessories/backpacks/gag_pack.tres")
+			return		
 	if override_item:
 		world_item.item = override_item
 		return

@@ -63,7 +63,9 @@ enum SuitType {
 const DEFAULT_HEAD := "res://models/cogs/heads/flunky.glb"
 
 
-func get_head() -> Node3D:
+func get_head(skele: Node3D = null) -> Node3D:
+	if skele:
+		return skele
 	var head_mod: Node3D
 	if head:
 		head_mod = head.instantiate()

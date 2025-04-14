@@ -25,9 +25,9 @@ const ANOMALIES_NEGATIVE: Array[String] = [
 
 const LEVEL_RANGES: Dictionary = {
 	0: [1, 3],
-	1: [2, 5],
-	2: [3, 7],
-	3: [5, 9],
+	1: [4, 5],# was 2 - 5, im thinking 4 - 5
+	2: [6, 7], #was 3 - 7 im thinking 6 - 7
+	3: [8, 9], #was 5 - 7 im thinking 8 - 9
 	4: [9, 11], # was 7 - 12
 	5: [8, 14],
 }
@@ -143,6 +143,10 @@ func randomize_details() -> void:
 	
 	# Add onto the room count for the difficulty
 	room_count += DIFFICULTY_ROOM_ADDITION * floor_difficulty
+	if floor_difficulty == 3: room_count = room_count * 1.2
+	if room_count % 2 == 0:
+		room_count += 1
+	print("FLOOR 3 MMMARAAAARTON")
 	
 	# Get the default Cog Pool if none specified
 	if not cog_pool:

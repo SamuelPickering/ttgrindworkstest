@@ -44,11 +44,14 @@ func adjust_cam():
 
 	# Calculate model camera size
 	var node_size: Vector3 = aabb.size * node.scale
-	var cam_size: float = max(node_size.x, node_size.y) / 2.0
+	var cam_size: float = max(node_size.x, node_size.y) / 2.0 * 1.2
 	camera.size = cam_size * 2.0 * (1.1 + camera_position_offset)
 	
 	# Move camera to model position and then back to avoid clipping
-	camera.position = aabb.get_center() * node.scale
+	var center := aabb.get_center() * node.scale
+	if "head_cone" in node:
+		center.y += node_size.y * 7.07  # 0.25 = shift upwards by 25% of model height
+	camera.position = center
 	camera.position.z -= 10.0
 
 func setup_tween() -> void:

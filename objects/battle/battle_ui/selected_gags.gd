@@ -2,10 +2,7 @@ extends HBoxContainer
 
 ## References to the selected gag panels
 var panels: Array[TextureRect] = []
-var paneleffects = {
-	0 : 0.5,
-	2 : 1.2
-}
+var paneleffects = {}
 
 ## The base gag panel
 @onready var gag_panel := $SelectedGag
@@ -39,6 +36,8 @@ func _ready():
 		panel.get_node('GeneralButton').disabled = true
 		panel.get_node('GeneralButton').hide()
 		panel.get_node('GeneralButton').pressed.connect(cancel_gag.bind(panels.find(panel)))
+	
+	battle_ui.s_damage_drifted.connect(reset_panel_effects)
 
 func append_gag(gag: ToonAttack) -> void:
 	# Add the icon to the gag panels
@@ -55,7 +54,9 @@ func append_gag(gag: ToonAttack) -> void:
 
 ## Reset all panels
 func on_round_start(_gag_order: Array[ToonAttack]) -> void:
+	paneleffects.clear()
 	for panel in panels:
+		panel.self_modulate = Color(1, 1, 1, 1)
 		panel.get_node('GagIcon').texture = null
 		panel.get_node('GeneralButton').disabled = true
 		panel.get_node('GeneralButton').hide()
@@ -104,6 +105,8 @@ func reset_panel_effects(dict: Dictionary) -> void:
 	paneleffects = dict
 	color_panels()
 func color_panels() -> void: # idk man %5
+	for panel in panels:
+		panel.self_modulate = Color(1, 1, 1, 1)
 	for idx in paneleffects.keys():
 		if paneleffects[idx] < 1:
 			panels[idx].self_modulate = Color(0.5, 0.2, 0.2, 1)
