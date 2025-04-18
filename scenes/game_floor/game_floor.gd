@@ -132,7 +132,7 @@ func generate_floor() -> void:
 		SceneLoader.add_persistent_node(player)
 	player.s_fell_out_of_world.connect(player_out_of_bounds)
 	player.stats.quest_rerolls = 4
-	print("in floor gd making quest rerolls equal to 4", player.stats.quest_rerolls)
+	Util.battles_encountered = 0
 	
 	player.global_position = entrance.get_node('SPAWNPOINT').global_position
 	player.state = Player.PlayerState.WALK
@@ -145,7 +145,7 @@ func generate_floor() -> void:
 		player.teleport_in(true)
 	if Util.window_focused:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+	technical_debt_music()
 	# Set the proper default bg music
 	if not floor_rooms.background_music.is_empty():
 		AudioManager.set_default_music(floor_rooms.background_music[RandomService.randi_channel('true_random') % floor_rooms.background_music.size()])
@@ -294,6 +294,16 @@ func player_out_of_bounds(player : Player) -> void:
 	player.global_position = entrance_node.global_position
 	player.fall_in(true)
 
+func technical_debt_music() -> void:
+	print("IS THIS SHIT RUNNING BRO???? GAME FLOOR LINE 298")
+	if floor_rooms.battle_music.size() >= 3:
+		print("IN TECHNICAL DEBT MUSIC")
+		print(floor_variant)
+		print(Util.floor_number)
+		if Util.floor_number <= 3:
+			floor_rooms.battle_music = [floor_rooms.battle_music[0]]
+		else:
+			floor_rooms.battle_music = [floor_rooms.battle_music[1], floor_rooms.battle_music[2]]
 
 #region GAME TRACKING
 ## Game Signals

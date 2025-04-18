@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemPool" load_steps=40 format=3 uid="uid://br3mtjoo6t1xc"]
+[gd_resource type="Resource" script_class="ItemPool" load_steps=38 format=3 uid="uid://br3mtjoo6t1xc"]
 
 [ext_resource type="Script" uid="uid://combwqypom1ru" path="res://objects/items/classes/item.gd" id="1_7i42i"]
 [ext_resource type="Resource" uid="uid://c1ityxde5xlmm" path="res://objects/items/resources/accessories/glasses/celebrity_shades.tres" id="4_n5156"]
@@ -18,8 +18,6 @@
 [ext_resource type="Resource" uid="uid://b77qp325baypa" path="res://objects/items/resources/passive/pink_slip.tres" id="19_4d72q"]
 [ext_resource type="Resource" uid="uid://c4mmtb82lian8" path="res://objects/items/resources/accessories/hats/conductor_hat.tres" id="19_u2mhm"]
 [ext_resource type="Resource" uid="uid://diqraclpq6np1" path="res://objects/items/resources/accessories/hats/anti_cog_control_hat.tres" id="20_drih5"]
-[ext_resource type="Resource" uid="uid://23im0r4wxo0l" path="res://objects/items/resources/passive/quest_reroll.tres" id="20_hgi1d"]
-[ext_resource type="Resource" uid="uid://dwo2a46e1wwew" path="res://objects/items/resources/accessories/hats/fedora.tres" id="20_sbfek"]
 [ext_resource type="Resource" uid="uid://cei7xyvnjhk0j" path="res://objects/items/resources/accessories/hats/party_hat.tres" id="21_ea5kx"]
 [ext_resource type="Resource" uid="uid://be4btivsjwqhe" path="res://objects/items/resources/passive/gag_voucher_small.tres" id="23_2uhqq"]
 [ext_resource type="Resource" uid="uid://bu1t0vxvh32yf" path="res://objects/items/resources/accessories/hats/anvil_hat.tres" id="26_l4krm"]

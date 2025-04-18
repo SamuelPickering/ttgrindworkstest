@@ -61,6 +61,7 @@ signal s_gag_modified(indexes: Array) # idk man %5
 func start_battle(cog_array: Array[Cog], battlenode: BattleNode):
 	cogs = cog_array
 	battle_node = battlenode
+	Util.battles_encountered += 1
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	battle_ui.s_turn_complete.connect(gags_selected)
 	
@@ -199,7 +200,7 @@ func someone_died(who: Node3D) -> void:
 			if round_actions.size() > 0: inject_battle_action(attack, 0)
 			else : inject_end_battle_action(attack, 0)
 	#await Task.delay(15)
-	print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
 
 
 	
@@ -932,4 +933,20 @@ func force_unlure_foreman (target: Cog) -> void:
 		if lure_effect.lure_type == lure_effect.LureType.DAMAGE_DOWN:
 			battle_stats[lure_effect.target].damage *= (1 / lure_effect.damage_nerf)
 			lure_effect.target = null
+
+func crowd_control(cog: Cog) -> void:
+	print("doing sound crowd control")
+	print(cog.foreman)
+	
+	#await sleep(0.05)
+	
+	cog.special_attack = true
+	var attack := get_cog_attack(cog)
+	cog.special_attack = false
+	
+	if not attack == null:
+		if round_actions.size() > 0: 
+			inject_battle_action(attack, 0)
+		else: 
+			inject_end_battle_action(attack, 0)
 	

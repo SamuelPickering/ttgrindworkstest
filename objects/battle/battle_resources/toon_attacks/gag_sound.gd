@@ -62,12 +62,17 @@ func action():
 			var real_damage = damage
 			if target != main_target:
 				real_damage *= 0.5
+			if target.foreman:
+				manager.crowd_control(target)                                     
 			if get_immunity(target):
 				manager.battle_text(target, 'IMMUNE')
+				target.set_animation('laugh')
 			else:
 				manager.affect_target(target, real_damage)
 			if not target.lured or not do_knockback:
-				target.set_animation('squirt-small')
+				if not get_immunity(target):
+					print("if immune in sound.gd this should run")
+					target.set_animation('squirt-small')
 			elif not get_immunity(target):
 				manager.knockback_cog(target)
 		

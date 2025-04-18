@@ -43,12 +43,20 @@ func _ready():
 	
 	for cog: Cog in cogs:
 		if RandomService.randf_channel('mod_cog_chance') < get_mod_cog_chance() and not cog.has_forced_dna and not cog.virtual_cog:
+			print("in battle node proxies :")
+			print(cog.dna)
+			var old_effects = cog.dna.status_effects
+			print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 			cog.dna = null
 			mod_cogs += 1
 			cog.use_mod_cogs_pool = true
 			cog.skelecog_chance = 0
 			cog.skelecog = false
 			cog.randomize_cog()
+			print(cog.dna.status_effects.size())
+			if old_effects.size() >= 1:
+				cog.dna.status_effects.append_array(old_effects)
+			print(cog.dna.status_effects.size())
 	
 	BattleService.s_battle_spawned.emit(self)
 

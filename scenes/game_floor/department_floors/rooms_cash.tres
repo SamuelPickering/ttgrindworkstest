@@ -115,4 +115,4 @@ final_rooms = Array[ExtResource("3_puix8")]([SubResource("Resource_kcq8j"), SubR
 one_time_rooms = Array[PackedScene]([])
 special_rooms = Array[ExtResource("3_puix8")]([SubResource("Resource_w1gik"), SubResource("Resource_0826d")])
 background_music = Array[AudioStream]([ExtResource("1_wellv")])
-battle_music = ExtResource("2_lxatr")
+battle_music = Array[AudioStream]([ExtResource("2_lxatr")])
