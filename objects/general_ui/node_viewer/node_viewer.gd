@@ -48,11 +48,14 @@ func adjust_cam():
 	camera.size = cam_size * 2.0 * (1.1 + camera_position_offset)
 	
 	# Move camera to model position and then back to avoid clipping
-	var center := aabb.get_center() * node.scale
-	if "head_cone" in node:
-		center.y += node_size.y * 7.07  # 0.25 = shift upwards by 25% of model height
+	#var center := aabb.get_center() * node.scale
+	#I have NO idea what I am doing but its 4 hours till 12am 
+	var center := node.global_transform.origin
 	camera.position = center
-	camera.position.z -= 10.0
+	if "head_cone" in node:
+		center.y += node_size.y * 7.07  
+	camera.position = center
+	camera.position.z -= 2.0
 
 func setup_tween() -> void:
 	spin_tween = null

@@ -73,7 +73,7 @@ func assign_item(world_item: WorldItem):
 			return
 		if Util.floor_number == 3:
 			#world_item.item = load("res://objects/items/resources/accessories/hats/rainbow_wig.tres")
-			world_item.item = load("res://objects/items/resources/accessories/backpacks/wood_sword.tres")
+			world_item.item = load("res://objects/items/resources/accessories/hats/rainbow_wig.tres")
 			#res://objects/items/resources/accessories/hats/pilot_hat.tres
 			return
 		if Util.floor_number == 4:

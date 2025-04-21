@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource("2_8mvlp")
-qualitoon = 2
+qualitoon = 1
 rarity = 0
 evergreen = true
 realtime = false

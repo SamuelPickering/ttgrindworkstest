@@ -6,7 +6,7 @@ signal s_dna_set
 ## Constants
 const VIRTUAL_COG_COLOR := Color('ff0000cc')
 const COMMON_LEVEL_RANGE := Vector2i(1, 12)
-const QUEST_HELP_CHANCE := 45
+const QUEST_HELP_CHANCE := 45 # can change back to 45
 
 ## For flying in and out
 const PROP_PROPELLER := preload('res://objects/props/etc/cog_propeller.tscn')
@@ -35,7 +35,7 @@ var attacks : Array[CogAttack]
 @export var skelecog := false # CHANGE TO TRUE AFTER DEMO
 @export var skelecog_chance := 10
 @export var fusion := false
-@export var foreman := false #change to TRUE
+@export var foreman := true #change to TRUE
 @export var fusion_chance := 0
 @export var virtual_cog := false
 @export var techbot := false #change to TRUE
@@ -45,6 +45,7 @@ var attacks : Array[CogAttack]
 @export var special_attack := false
 @export var foreman_attack_boost := 1.25
 @export var last_damage_source = ""
+@export var ts_pmo = false #rebalancing these goddamn special room cogs
 var use_mod_cogs_pool := false
 var has_forced_dna := false
 
@@ -119,6 +120,7 @@ func face_position(pos: Vector3):
 		rotate_y(deg_to_rad(180))
 
 func randomize_cog() -> void:
+	print("cogs rebalance in cog.gd line 122 : ", level_rebalance)
 	roll_for_attributes()
 	#if dna: print(dna.status_effects)
 	#print("after roll for att")
@@ -178,14 +180,14 @@ func roll_for_attributes() -> void:
 func roll_for_level() -> void:
 
 	# Get a random cog level first
-	if level == 0:
+	if level == 0 or ts_pmo == true:
 		if is_instance_valid(Util.floor_manager):
 			custom_level_range.x += 3
 			custom_level_range = Util.floor_manager.level_range
 		elif dna: 
 			custom_level_range = Vector2i(dna.level_low, dna.level_high)
 		level = RandomService.randi_range_channel('cog_levels', custom_level_range.x, custom_level_range.y)
-		print("level pre re balance line: ", level)
+		print("level pre re balance line: ", level, level_rebalance)
 		level += level_rebalance
 		print("level after rebalance line: ", level)
 	#if level <= 9: level = level + 3 I added this crap, removing it
@@ -196,7 +198,6 @@ func roll_for_level() -> void:
 		level = (custom_level_range.y - level_range_offset) + 1
 
 func roll_for_dna() -> void:
-	print(RandomService.randi_channel('cog_dna') % pool.cogs.size())
 	if use_mod_cogs_pool:
 		pool = Globals.MOD_COG_POOL.load()
 	# Try to get the cog pool from the floor manager
@@ -224,25 +225,18 @@ func roll_for_dna() -> void:
 	# Get a random dna if dna doesn't exist
 	if not dna:
 		while not test_dna(dna, level):
-			# print("are you sure?")
+			#instead of making a new cog im just making all minglers have fore cog effects, lets see if backfires in teh future
+			
 			dna = pool.cogs[RandomService.randi_channel('cog_dna') % pool.cogs.size()]
 	else:
 		has_forced_dna = true
-	if dna: print(dna.status_effects)
-	for effect in dna.status_effects: 
-		print(effect.get_class())
-		var sproperties = effect.get_property_list()
-		for prop in sproperties:
-			var name = prop["name"]
-			var usage = prop["usage"]
-			
-			if usage & PROPERTY_USAGE_STORAGE:
-				print(effect.get(name))
-		if effect.resource_path: print("resource path: ", effect.resource_path)
 	if foreman: 
 		dna = pool.cogs[ pool.cogs.size() - 2]
 		skelecog = true
-	#if use_mod_cogs_pool: dna = pool.cogs[ pool.cogs.size() - 4]
+	if not foreman:
+		if dna == pool.cogs[ pool.cogs.size() - 2]:
+			print("changed a mingler into a two face 😭")
+			dna = pool.cogs[ pool.cogs.size() - 3]
 	dna = dna.duplicate()
 
 func get_attacks() -> Array[CogAttack]:

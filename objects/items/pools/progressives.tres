@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://c3sjb3vivkvux" path="res://objects/items/resources/passive/laff_boost.tres" id="2_xc0j1"]
 [ext_resource type="Resource" uid="uid://c8yh80vqngv1b" path="res://objects/items/resources/passive/music_treasure.tres" id="8_2kcpp"]
 [ext_resource type="Resource" uid="uid://d0n6coya2868f" path="res://objects/items/resources/passive/flower_treasure.tres" id="9_mv4xo"]
-[ext_resource type="Resource" uid="uid://bd5d562nvcvr2" path="res://objects/items/resources/passive/light_blue_jellybean.tres" id="11_hpc8x"]
+[ext_resource type="Resource" uid="uid://b3e3bj8ick774" path="res://objects/items/resources/passive/pink_jellybean.tres" id="11_hpc8x"]
 [ext_resource type="Resource" uid="uid://c5cavaivrrvb" path="res://objects/items/resources/passive/toonups/feather.tres" id="11_lxkom"]
 [ext_resource type="Resource" uid="uid://dua74bqlj5ep1" path="res://objects/items/resources/passive/toonups/megaphone.tres" id="12_qektw"]
 [ext_resource type="Resource" uid="uid://bvukmcjmx00ho" path="res://objects/items/resources/passive/toonups/lipstick.tres" id="13_k2mmi"]

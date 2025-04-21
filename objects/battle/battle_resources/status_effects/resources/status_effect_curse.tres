@@ -6,7 +6,7 @@
 script = ExtResource("1_jkabf")
 track_name = "Squirt"
 quality = 1
-rounds = -1
+rounds = 2
 icon_color = Color(1, 1, 1, 1)
 icon_scale = 1.0
 mini_icon_color = Color(1, 1, 1, 1)

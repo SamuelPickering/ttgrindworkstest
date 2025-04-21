@@ -291,13 +291,13 @@ want_ui_spin = true
 ui_cam_offset = 0.0
 item_name = "Top Hat"
 item_description = "Style has its price"
-big_description = "+ 10 Max Laff
+big_description = "+ 15 Max Laff
 - 10% Evasiveness"
 model = ExtResource("2_w4pdb")
 stats_add = {
 "evasiveness": -0.1,
-"hp": 10,
-"max_hp": 10
+"hp": 15,
+"max_hp": 15
 }
 stats_multiply = {}
 player_values = {}

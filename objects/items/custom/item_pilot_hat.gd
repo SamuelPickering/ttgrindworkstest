@@ -1,6 +1,6 @@
 extends ItemScript
 
-const DMG_BONUS := 0.5
+const DMG_BONUS := 1.5
 
 var turns_used = 0
 var activate_turn = 5
@@ -17,6 +17,7 @@ func setup() -> void:
 	BattleService.s_battle_started.connect(refresh_turns)
 	BattleService.s_action_started.connect(on_action_started)
 	BattleService.s_action_finished.connect(on_action_finished)
+	BattleService.s_round_ended.connect(on_round_ended)
 	
 
 func on_action_started(action: BattleAction) -> void:
@@ -35,3 +36,13 @@ func on_action_finished(action: BattleAction) -> void:
 	if damage_multiplied:
 		print(action.action_name, " last action had its damage multiplied")
 		damage_multiplied = false
+
+func on_round_ended(manager: BattleManager) -> void:
+	var turns_remaining_in_cycle = activate_turn - (turns_used % activate_turn)
+	var activation_turn_next_round = turns_remaining_in_cycle - 1     
+	if turns_remaining_in_cycle <= Util.get_player().stats.max_turns:
+		var dict = {}
+		dict[activation_turn_next_round] = DMG_BONUS
+		manager.battle_ui.s_damage_drifted.emit(dict)
+		print(activation_turn_next_round)
+	print(activation_turn_next_round)

@@ -39,6 +39,7 @@ var has_moved : Array[Node3D] = []
 var current_round_combo_data := {} # Dictionary to track gag types and targets per round
 var combo_damage_actions := [] # Stores combo damage actions to process
 var bellow = false
+var start_cog_size = 0
 
 ## Signals
 signal s_focus_char(character: Node3D)
@@ -60,6 +61,7 @@ signal s_gag_modified(indexes: Array) # idk man %5
 
 func start_battle(cog_array: Array[Cog], battlenode: BattleNode):
 	cogs = cog_array
+	start_cog_size = cogs.size()
 	battle_node = battlenode
 	Util.battles_encountered += 1
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -101,8 +103,7 @@ func append_action(action: BattleAction):
 
 func gags_selected(gags: Array[ToonAttack]):
 	s_gags_chosen.emit(gags)
-	print(battle_ui.selected_gags)
-	print("lets see if event ran")
+	battle_ui.gag_order_menu.clear_panel_effects()
 	for gag in gags:
 		print(gag.damage)
 		append_action(gag)
@@ -150,10 +151,6 @@ func run_actions():
 		current_action = round_actions.pop_front()
 		if current_action == null:
 			continue
-		print("curr action")
-		print(current_action)
-		print("action array:")
-		print(round_actions)
 		if current_action is CogAttack:
 			if not current_action.action_name == "" :
 				show_action_name(current_action.action_name + "!",current_action.summary)
@@ -186,17 +183,15 @@ func someone_died(who: Node3D) -> void:
 
 	for i in range(cogs.size() - 1, -1, -1):
 		var cog = cogs[i]
-		print("doing the foreman attacks check")
-		print(cog.foreman)
 		if not cog.foreman:
 			continue
-		print("ig theres a foreman here")
 		await force_unlure_foreman(cog)
 		#await sleep(0.05)
 		cog.special_attack = true
 		var attack := get_cog_attack(cog)
 		cog.special_attack = false
 		if not attack == null:
+			attack.ActionTarget.SELF
 			if round_actions.size() > 0: inject_battle_action(attack, 0)
 			else : inject_end_battle_action(attack, 0)
 	#await Task.delay(15)
@@ -221,7 +216,6 @@ func someone_died(who: Node3D) -> void:
 	# Scrub status effects for the Someone in question
 	for status: StatusEffect in get_statuses_for_target(who):
 		if status.on_death:
-			print("bm line 233 now doing status on death:")
 			status.on_death()
 		scrub_status_effect(status)
 		if not status.target:
@@ -255,18 +249,11 @@ func round_over():
 	
 	# Run status effects
 	await renew_status_effects()
-	print("in round over")
-	print(round_end_actions)
-	print(round_actions)
 	if not round_end_actions.is_empty():
-		print("IS this running? bm 286")
 		if not round_actions.is_empty(): #round_actions.assign(round_end_actions)
 			round_actions.append(round_end_actions)
-			print("there was stuff in round_actions")
 		else: 
 			round_actions.assign(round_end_actions)
-			print("the else in bm 295 ran")
-			print(round_actions)
 		round_end_actions.clear()
 		await run_actions()
 
@@ -321,7 +308,9 @@ func end_battle() -> void:
 				player.boost_queue.queue_text("Bounty!", Color.GREEN)
 			else:
 				chest.item_pool = battle_node.item_pool
-			chest.override_replacement_rolls = RandomService.randi_channel('true_random') % 2 == 0
+			chest.override_replacement_rolls = RandomService.randi_channel('true_random') % 2 == 0		
+			if start_cog_size >= 4:
+				extra_chest()
 			#chest2.override_replacement_rolls = RandomService.randi_channel('true_random') % 2 == 0
 	# Reset player & partners as persistent nodes
 	SceneLoader.add_persistent_node(player)
@@ -931,7 +920,8 @@ func force_unlure_foreman (target: Cog) -> void:
 		lure_effect.target = null
 	if lure_effect:
 		if lure_effect.lure_type == lure_effect.LureType.DAMAGE_DOWN:
-			battle_stats[lure_effect.target].damage *= (1 / lure_effect.damage_nerf)
+			if lure_effect.target != null: 
+				if battle_stats.has(lure_effect.target): battle_stats[lure_effect.target].damage *= (1 / lure_effect.damage_nerf)
 			lure_effect.target = null
 
 func crowd_control(cog: Cog) -> void:
@@ -949,4 +939,24 @@ func crowd_control(cog: Cog) -> void:
 			inject_battle_action(attack, 0)
 		else: 
 			inject_end_battle_action(attack, 0)
+
+func extra_chest():
+		if battle_node.item_pool:
+			var chest3 = load('res://objects/interactables/treasure_chest/treasure_chest.tscn').instantiate()
+			battle_node.get_parent().add_child(chest3)
+			#battle_node.get_parent().add_child(chest2)
+			chest3.global_position = battle_node.global_position
+			#chest2.global_position = battle_node.global_position
+			chest3.global_position += Vector3(0, 0, 1.5)
+			print("CHEST3 POSITION AFTER BATTLE in bm 949:", chest3.global_position)
+			chest3.global_rotation = battle_node.global_rotation
+			#chest2.global_rotation = battle_node.global_rotation
+			#chest2.item_pool = load(ITEM_POOL_PROGRESSIVES)
+			player.boost_queue.queue_text("4 Cog Bounty!", Color.GREEN)
+			if player.better_battle_rewards == true and current_round <= 2:
+				chest3.item_pool = load(ITEM_POOL_PROGRESSIVES)
+				player.boost_queue.queue_text("Bounty!", Color.GREEN)
+			else:
+				chest3.item_pool = battle_node.item_pool
+			chest3.override_replacement_rolls = RandomService.randi_channel('true_random') % 2 == 0
 	

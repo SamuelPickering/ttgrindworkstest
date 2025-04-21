@@ -2,7 +2,7 @@
 extends BattleNode
 
 
-const MAX_DYNAMIC_COGS := 4
+var MAX_DYNAMIC_COGS := 4
 var MIN_DYNAMIC_COGS := 1
 const COG := preload('res://objects/cog/cog.tscn')
 var justbc = 0
@@ -11,12 +11,10 @@ var justbc = 0
 @export var cog_range := Vector2i(2, 4):
 	set(x):
 		cog_range = x
-		if Util.floor_number > 3:
-			MIN_DYNAMIC_COGS = 1
-			print("execute cog count bump")
-		else: MIN_DYNAMIC_COGS = 1
-
-			
+		if Util.floor_number == 4:
+			MAX_DYNAMIC_COGS = 3
+		if Util.floor_number == 5:
+			MIN_DYNAMIC_COGS == 3
 		cog_range.x = clamp(cog_range.x, MIN_DYNAMIC_COGS, MAX_DYNAMIC_COGS)
 		cog_range.y = clamp(cog_range.y, cog_range.x, MAX_DYNAMIC_COGS)
 		if not cog_node:
@@ -50,9 +48,9 @@ func _refresh_cogs() -> void:
 			#cog_count = 2
 			cog_count = 2
 			print("FIRST BATTLE ON FLOOR 4 Foreman")
+			
 		else: cog_count = RandomService.randi_range_channel("cog_counts", cog_range.x, cog_range.y)
 	Util.battlesonfloor += 1
-	print("Util battle after coug count: ", Util.battlesonfloor)
 	clear_cogs()
 	if Engine.is_editor_hint():
 		spawn_cogs(cog_count)
@@ -82,13 +80,15 @@ func rebalance_cogs(cog, cog_count) -> void:
 		cog.foreman = true
 		if cog_count >= 4:
 			cog.level_rebalance -= 2
+		# i hope this never runs
+		if cog_count == 2:
+			cog.level_rebalance += 5
 	if Util.floor_number == 4:
 		cog.foreman = true
 		if cog_count == 2:
 			print(cog.level)
-			cog.level_rebalance += 3
+			if Util.battlesonfloor > 1:  cog.level_rebalance += 3
 			print("Rebalancing group of 2 cogs +3 levels to cog")
-			print(cog.level)
 	if Util.floor_number <= 3:
 		if cog_count <= 2:
 			cog.level_rebalance += Util.floor_number

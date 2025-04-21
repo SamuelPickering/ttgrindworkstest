@@ -15,6 +15,7 @@ func on_death() -> void:
 	var status_effect := Curse_Status_Reference.duplicate()
 	status_effect.target = Util.get_player()
 	status_effect.track_name = target.last_damage_source
+	status_effect.rounds = 2
 	print("the track cursed:", status_effect.track_name)
 	manager.add_status_effect(status_effect)
 

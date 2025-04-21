@@ -3,6 +3,7 @@ extends HBoxContainer
 ## References to the selected gag panels
 var panels: Array[TextureRect] = []
 var paneleffects = {}
+var itemeffects = {}
 
 ## The base gag panel
 @onready var gag_panel := $SelectedGag
@@ -28,7 +29,8 @@ func _ready():
 		var panel = gag_panel.duplicate()
 		add_child(panel)
 		panels.append(panel)
-	
+	for i in 3:
+		paneleffects[i] = 1
 	# X Button configuration
 	for panel in panels:
 		panel.get_node('GagIcon').mouse_entered.connect(hover_slot.bind(panels.find(panel)))
@@ -38,6 +40,7 @@ func _ready():
 		panel.get_node('GeneralButton').pressed.connect(cancel_gag.bind(panels.find(panel)))
 	
 	battle_ui.s_damage_drifted.connect(reset_panel_effects)
+	battle_ui.s_item_effect.connect(reset_item_effects)
 
 func append_gag(gag: ToonAttack) -> void:
 	# Add the icon to the gag panels
@@ -54,7 +57,6 @@ func append_gag(gag: ToonAttack) -> void:
 
 ## Reset all panels
 func on_round_start(_gag_order: Array[ToonAttack]) -> void:
-	paneleffects.clear()
 	for panel in panels:
 		panel.self_modulate = Color(1, 1, 1, 1)
 		panel.get_node('GagIcon').texture = null
@@ -79,18 +81,25 @@ func refresh_gags(gags: Array[ToonAttack]):
 
 func hover_slot(idx: int) -> void:
 	if (not current_gags) or current_gags.size() - 1 < idx:
-		if not paneleffects.has(idx):
+		if not paneleffects[idx] != 1 and not itemeffects.has(idx):
 			return
+	
 	#manager.s_gag_modified.connect(color_panels) #idk man %5
 	var atk_string: String = ""
-	if paneleffects.has(idx):
+	if itemeffects.has(idx):
+		atk_string += itemeffects[idx]
+		atk_string += "\n"
+			
+	if paneleffects.has(idx) and paneleffects[idx] != 1:
+		#if paneleffects[idx] == 1 and not itemeffects.has(idx):
+			#return
 		if paneleffects[idx] > 1:
 			atk_string += "Gag damage on this turn is boosted by " + str(paneleffects[idx] * 100) + "%"
-		else: atk_string += "Gag damage on this turn is reduced by " + str(paneleffects[idx] * 100) + "%"
+		elif paneleffects[idx] < 1: atk_string += "Gag damage on this turn is reduced by " + str(paneleffects[idx] * 100) + "%"
 	if  not ((not current_gags) or current_gags.size() - 1 < idx):
 		var gag: ToonAttack = current_gags[idx]
 		var has_main_target: bool = gag.main_target != null
-		if paneleffects.has(idx):
+		if paneleffects[idx] != 1:
 			atk_string += "\n"
 		for cog in manager.cogs:
 			if cog in gag.targets:
@@ -102,7 +111,12 @@ func hover_slot(idx: int) -> void:
 	HoverManager.hover(atk_string, 20, 0.0125)
 	
 func reset_panel_effects(dict: Dictionary) -> void:
-	paneleffects = dict
+	for idx in dict.keys():
+		paneleffects[idx] = paneleffects[idx] * dict[idx]
+	color_panels()
+func reset_item_effects(dict: Dictionary) -> void:
+	#lets hope I don't add anymore items that do turn specfic things
+	itemeffects = dict
 	color_panels()
 func color_panels() -> void: # idk man %5
 	for panel in panels:
@@ -110,6 +124,18 @@ func color_panels() -> void: # idk man %5
 	for idx in paneleffects.keys():
 		if paneleffects[idx] < 1:
 			panels[idx].self_modulate = Color(0.5, 0.2, 0.2, 1)
-		else: panels[idx].self_modulate = Color(0.2, 0.5, 0.2, 1)
+			#var mat = CanvasItemMaterial.new()
+			
+			#mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+			#panels[idx].material = mat
+		elif paneleffects[idx] > 1: panels[idx].self_modulate = Color(0.2, 0.5, 0.2, 1)
+	for idx in itemeffects.keys():
+		panels[idx].self_modulate *= Color(1.2, 0.6, 1.4) * 1.6
 func stop_hover() -> void:
 	HoverManager.stop_hover()
+	
+func clear_panel_effects() -> void:
+
+	itemeffects.clear()
+	for i in 3:
+		paneleffects[i] = 1

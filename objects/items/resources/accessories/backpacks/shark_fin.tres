@@ -40,11 +40,11 @@ want_ui_spin = true
 ui_cam_offset = 0.55
 item_name = "Shark Fin"
 item_description = "Terror of the deep"
-big_description = "Organic Squirt boost  (+10%)"
+big_description = "Organic Squirt boost  (+15%)"
 model = ExtResource("3_3ovak")
 stats_add = {}
 stats_multiply = {
-"gag_boost:Squirt": 1.1
+"gag_boost:Squirt": 1.15
 }
 player_values = {}
 arbitrary_data = {}

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemPool" load_steps=38 format=3 uid="uid://br3mtjoo6t1xc"]
+[gd_resource type="Resource" script_class="ItemPool" load_steps=40 format=3 uid="uid://br3mtjoo6t1xc"]
 
 [ext_resource type="Script" uid="uid://combwqypom1ru" path="res://objects/items/classes/item.gd" id="1_7i42i"]
 [ext_resource type="Resource" uid="uid://c1ityxde5xlmm" path="res://objects/items/resources/accessories/glasses/celebrity_shades.tres" id="4_n5156"]
@@ -8,7 +8,6 @@
 [ext_resource type="Resource" uid="uid://bgw6nin360tg5" path="res://objects/items/resources/accessories/backpacks/wood_sword.tres" id="9_gtle3"]
 [ext_resource type="Resource" uid="uid://b77syxn2vyh6p" path="res://objects/items/resources/accessories/glasses/bug_eye_glasses.tres" id="10_vrjl7"]
 [ext_resource type="Resource" uid="uid://drbah6xpjisrg" path="res://objects/items/resources/accessories/glasses/cateye_glasses.tres" id="11_qbttx"]
-[ext_resource type="Resource" uid="uid://cuuiafxrn4awf" path="res://objects/items/resources/accessories/backpacks/cog_pack.tres" id="12_5ubrc"]
 [ext_resource type="Resource" uid="uid://inp53b3xwwxw" path="res://objects/items/resources/accessories/glasses/eye_patch.tres" id="13_0s7cf"]
 [ext_resource type="Resource" uid="uid://jxck10xls47y" path="res://objects/items/resources/accessories/glasses/mask.tres" id="14_lq7hb"]
 [ext_resource type="Resource" uid="uid://cs5v54jdptmge" path="res://objects/items/resources/accessories/glasses/square_frames.tres" id="15_2jine"]
@@ -18,14 +17,17 @@
 [ext_resource type="Resource" uid="uid://b77qp325baypa" path="res://objects/items/resources/passive/pink_slip.tres" id="19_4d72q"]
 [ext_resource type="Resource" uid="uid://c4mmtb82lian8" path="res://objects/items/resources/accessories/hats/conductor_hat.tres" id="19_u2mhm"]
 [ext_resource type="Resource" uid="uid://diqraclpq6np1" path="res://objects/items/resources/accessories/hats/anti_cog_control_hat.tres" id="20_drih5"]
+[ext_resource type="Resource" uid="uid://ctrlcwi2mdau2" path="res://objects/items/resources/accessories/hats/pilot_hat.tres" id="21_3nl6l"]
 [ext_resource type="Resource" uid="uid://cei7xyvnjhk0j" path="res://objects/items/resources/accessories/hats/party_hat.tres" id="21_ea5kx"]
+[ext_resource type="Resource" uid="uid://mjt03er8fskn" path="res://objects/items/resources/accessories/hats/dino_hat.tres" id="22_3nl6l"]
 [ext_resource type="Resource" uid="uid://be4btivsjwqhe" path="res://objects/items/resources/passive/gag_voucher_small.tres" id="23_2uhqq"]
+[ext_resource type="Resource" uid="uid://bw4hfnjy11e63" path="res://objects/items/resources/accessories/backpacks/plane_wings.tres" id="23_3nl6l"]
+[ext_resource type="Resource" uid="uid://cvu060gbvc1k4" path="res://objects/items/resources/accessories/glasses/alien_glasses.tres" id="24_3nl6l"]
 [ext_resource type="Resource" uid="uid://bu1t0vxvh32yf" path="res://objects/items/resources/accessories/hats/anvil_hat.tres" id="26_l4krm"]
 [ext_resource type="Resource" uid="uid://duygfpffob40k" path="res://objects/items/resources/passive/zzz_treasure.tres" id="28_0e2n7"]
 [ext_resource type="Resource" uid="uid://cyiwxplege133" path="res://objects/items/resources/passive/emergency_unite.tres" id="28_epw5c"]
 [ext_resource type="Resource" uid="uid://dbbwxcnrbpxum" path="res://objects/items/resources/accessories/backpacks/super_toon_cape.tres" id="28_uwia6"]
 [ext_resource type="Resource" uid="uid://cwcmtkowcsrb6" path="res://objects/items/resources/accessories/glasses/3d_glasses.tres" id="31_kaqci"]
-[ext_resource type="Resource" uid="uid://brb83m4hxj5jl" path="res://objects/items/resources/accessories/hats/propeller_hat.tres" id="32_pp0dd"]
 [ext_resource type="Resource" uid="uid://g3qgy38g5dqs" path="res://objects/items/resources/accessories/hats/top_hat.tres" id="33_l6yao"]
 [ext_resource type="Resource" uid="uid://g37ycfsrbpep" path="res://objects/items/resources/accessories/hats/viking_helmet.tres" id="34_x7v3f"]
 [ext_resource type="Resource" uid="uid://cmjhh4fc3c231" path="res://objects/items/resources/passive/balancing_scale.tres" id="36_ij18s"]
@@ -40,4 +42,4 @@
 
 [resource]
 script = ExtResource("18_ubwkd")
-items = Array[ExtResource("1_7i42i")]([ExtResource("12_5ubrc"), ExtResource("7_vxn22"), ExtResource("8_m7od6"), ExtResource("9_gtle3"), ExtResource("10_vrjl7"), ExtResource("11_qbttx"), ExtResource("4_n5156"), ExtResource("13_0s7cf"), ExtResource("14_lq7hb"), ExtResource("15_2jine"), ExtResource("20_drih5"), ExtResource("17_krp3h"), ExtResource("18_mftg4"), ExtResource("19_u2mhm"), ExtResource("21_ea5kx"), ExtResource("23_2uhqq"), ExtResource("8_fu8ak"), ExtResource("19_4d72q"), ExtResource("28_uwia6"), ExtResource("28_0e2n7"), ExtResource("26_l4krm"), ExtResource("28_epw5c"), ExtResource("31_kaqci"), ExtResource("32_pp0dd"), ExtResource("33_l6yao"), ExtResource("34_x7v3f"), ExtResource("36_ij18s"), ExtResource("41_525wq"), ExtResource("42_8ea2i"), ExtResource("43_w6aaa"), ExtResource("46_8jn6d"), ExtResource("47_370ej"), ExtResource("48_0qktu"), ExtResource("50_0bbk7"), ExtResource("51_vqjht")])
+items = Array[ExtResource("1_7i42i")]([ExtResource("7_vxn22"), ExtResource("8_m7od6"), ExtResource("21_3nl6l"), ExtResource("9_gtle3"), ExtResource("10_vrjl7"), ExtResource("11_qbttx"), ExtResource("4_n5156"), ExtResource("13_0s7cf"), ExtResource("14_lq7hb"), ExtResource("15_2jine"), ExtResource("22_3nl6l"), ExtResource("20_drih5"), ExtResource("17_krp3h"), ExtResource("18_mftg4"), ExtResource("19_u2mhm"), ExtResource("21_ea5kx"), ExtResource("23_2uhqq"), ExtResource("8_fu8ak"), ExtResource("23_3nl6l"), ExtResource("19_4d72q"), ExtResource("28_uwia6"), ExtResource("28_0e2n7"), ExtResource("26_l4krm"), ExtResource("28_epw5c"), ExtResource("31_kaqci"), ExtResource("24_3nl6l"), ExtResource("33_l6yao"), ExtResource("34_x7v3f"), ExtResource("36_ij18s"), ExtResource("41_525wq"), ExtResource("42_8ea2i"), ExtResource("43_w6aaa"), ExtResource("46_8jn6d"), ExtResource("47_370ej"), ExtResource("48_0qktu"), ExtResource("50_0bbk7"), ExtResource("51_vqjht")])

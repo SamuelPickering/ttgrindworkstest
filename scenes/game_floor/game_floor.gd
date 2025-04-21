@@ -96,9 +96,17 @@ func generate_floor() -> void:
 	floor_rooms = floor_variant.floor_type
 	Util.floor_type = floor_rooms
 	# Randomly decide 40% - 60% battle rooms 
-	battle_ratio = 0.4 + (0.1 * float(RandomService.randi_channel('battle_ratio') % 3))
+	if Util.floor_number >= 4:
+		battle_ratio = 0.55 + (0.1 * float(RandomService.randi_channel('battle_ratio') % 2))
+		room_count = room_count * 1.3
+	else: battle_ratio = 0.4 + (0.1 * float(RandomService.randi_channel('battle_ratio') % 3))
 	var total_rooms = int((room_count - 2) / 2)
 	var total_battles := int(total_rooms * battle_ratio)
+	print("in game floor.gd")
+	print("floor num", Util.floor_number)
+	print("battle ratio: ", battle_ratio)
+	print("total rooms: ", total_rooms)
+	print("total batlles:", total_battles)
 	rooms_remaining = [total_battles, total_rooms - total_battles]
 
 	if floor_rooms.special_rooms and RandomService.randf_channel('room_logic') > 0.001: # was 0.8 guarantted special room
@@ -295,11 +303,7 @@ func player_out_of_bounds(player : Player) -> void:
 	player.fall_in(true)
 
 func technical_debt_music() -> void:
-	print("IS THIS SHIT RUNNING BRO???? GAME FLOOR LINE 298")
 	if floor_rooms.battle_music.size() >= 3:
-		print("IN TECHNICAL DEBT MUSIC")
-		print(floor_variant)
-		print(Util.floor_number)
 		if Util.floor_number <= 3:
 			floor_rooms.battle_music = [floor_rooms.battle_music[0]]
 		else:

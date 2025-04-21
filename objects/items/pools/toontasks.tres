@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://wiibpvvki8vs" path="res://objects/items/classes/item_pool.gd" id="7_dju7n"]
 [ext_resource type="Resource" uid="uid://bbt6o1b1xao18" path="res://objects/items/resources/passive/starfish_treasure.tres" id="8_4a87j"]
 [ext_resource type="Resource" uid="uid://bd5d562nvcvr2" path="res://objects/items/resources/passive/light_blue_jellybean.tres" id="8_iadk3"]
-[ext_resource type="Resource" uid="uid://danb3hsfnfror" path="res://objects/items/resources/passive/candies/candy_damage.tres" id="10_exgii"]
+[ext_resource type="Resource" uid="uid://b3e3bj8ick774" path="res://objects/items/resources/passive/pink_jellybean.tres" id="10_exgii"]
 [ext_resource type="Resource" uid="uid://cckkv76gxoem3" path="res://objects/items/resources/passive/candies/candy_defense.tres" id="11_cse62"]
 [ext_resource type="Resource" uid="uid://y5nhq5oudm83" path="res://objects/items/resources/passive/candies/candy_evasiveness.tres" id="12_bj61c"]
 [ext_resource type="Resource" uid="uid://rytsv7bygrwl" path="res://objects/items/resources/passive/candies/candy_luck.tres" id="13_31fts"]

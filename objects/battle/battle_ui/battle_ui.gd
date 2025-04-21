@@ -22,6 +22,7 @@ signal s_gag_canceled(gag: BattleAction)
 signal s_gags_updated(gags: Array[ToonAttack])
 signal s_update_toonups
 signal s_damage_drifted(dict: Dictionary)
+signal s_item_effect(dict: Dictionary)
 
 # Locals
 var turn := 0:
@@ -137,9 +138,6 @@ func sort_gags(gags: Array[ToonAttack]) -> Array[ToonAttack]:
 		#gag_order_menu.panels[0].color = (Color(0.867, 0.627, 0.867))
 		var panel1 = gag_order_menu.panels[0]
 		var children = panel1.get_children()
-		for child in children:
-			print("panel child node: ", child.name)
-		print(gag_order_menu.panels)
 		#if panel.material:
 		#panel.material.set_shader_param("color", Color(0, 1, 0, 1))  # Green
 	#print(gag_order_menu.get_property_list())    var style_box = StyleBoxFlat.new()

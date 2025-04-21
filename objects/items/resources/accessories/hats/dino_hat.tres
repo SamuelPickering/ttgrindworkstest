@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="ItemAccessory" load_steps=41 format=3 uid="uid://mjt03er8fskn"]
+[gd_resource type="Resource" script_class="ItemAccessory" load_steps=42 format=3 uid="uid://mjt03er8fskn"]
 
 [ext_resource type="Script" uid="uid://fb0tqfojo57q" path="res://objects/items/classes/accessory_placement.gd" id="1_b3rfp"]
 [ext_resource type="Script" uid="uid://c4eyu1xvv7h2l" path="res://objects/items/classes/head_placement.gd" id="2_yumbq"]
-[ext_resource type="Texture2D" uid="uid://ddukw4er3rdpv" path="res://models/accessories/hats/toonosaur_hat/dino_hat.png" id="3_5xwir"]
+[ext_resource type="Texture2D" uid="uid://ce0jjjr6y2dmo" path="res://models/accessories/hats/toonosaur_hat/toonosuar_hat.png" id="3_5xwir"]
 [ext_resource type="Script" uid="uid://bu76krixsqkaj" path="res://objects/items/custom/item_dino_hat.gd" id="4_vhxxl"]
 [ext_resource type="PackedScene" uid="uid://coyfr1rv1j81" path="res://models/accessories/hats/toonosaur_hat/tt_m_chr_avt_acc_hat_dinosaur.glb" id="5_f1wen"]
-[ext_resource type="Script" uid="uid://dvu24b3o8i3sj" path="res://objects/items/classes/item_accessory.gd" id="6_dwmqf"]
 [ext_resource type="AudioStream" uid="uid://dowax1uhr6ncy" path="res://audio/sfx/battle/cogs/SA_bellow.ogg" id="6_bedst"]
+[ext_resource type="Script" uid="uid://dvu24b3o8i3sj" path="res://objects/items/classes/item_accessory.gd" id="6_dwmqf"]
+
 [sub_resource type="Resource" id="Resource_8pqho"]
 script = ExtResource("2_yumbq")
 species = 2

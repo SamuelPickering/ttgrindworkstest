@@ -19,7 +19,7 @@ func setup() -> void:
 	last_player_hp = player.stats.hp
 
 func on_action_started(action: BattleAction) -> void:
-	if action is CogAttack:
+	if action is CogAttack and action.ActionTarget.SELF:
 		if Util.get_player().stats.hp == Util.get_player().stats.max_hp:
 			print("pre multiscale: ", action.damage)
 			action.damage = action.damage * 0.50

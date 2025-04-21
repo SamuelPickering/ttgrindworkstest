@@ -74,7 +74,7 @@ func get_next_floors() -> void:
 	if Util.floor_number >= 3:
 		add_normal_floor(floor_variants)
 		add_positive_floor(floor_variants)
-	for i in 3:
+	for i in 4:
 		var random_floor := floor_variants[RandomService.randi_channel('floors') % floor_variants.size()] 
 		#floor_variants.remove_at(floor_variants.find(random_floor))
 		var new_floor: FloorVariant = Util.universal_load(FLOOR_VARIANT_PATH + random_floor).duplicate()

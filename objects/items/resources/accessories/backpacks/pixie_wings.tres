@@ -40,12 +40,12 @@ want_ui_spin = true
 ui_cam_offset = 0.4
 item_name = "Pixie Wings"
 item_description = "A gentler touch..."
-big_description = "+ 20% healing effectiveness
+big_description = "+ 25% healing effectiveness
 - 5% damage"
 model = ExtResource("4_h8b75")
 stats_add = {
 "damage": -0.05,
-"healing_effectiveness": 0.2
+"healing_effectiveness": 0.25
 }
 stats_multiply = {}
 player_values = {}

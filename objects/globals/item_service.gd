@@ -50,7 +50,6 @@ func get_random_item(pool: ItemPool, override_rolls := false) -> Item:
 	var trimmed_pool: Array[Item] = []
 	for item in pool.items:
 		if not item in seen_items:
-			#print("item name: ",item.item_name, "in trimmed")
 			trimmed_pool.append(item)
 	
 	# If no item can be given to the player, just give them treasure
@@ -71,8 +70,8 @@ func get_random_item(pool: ItemPool, override_rolls := false) -> Item:
 	# Include Q7: 26.2%
 	# If a low rarity is drawn that has no items available, there is a continuous 50% chance to upgrade to the next rarity.
 	# If this fails, a random treasure will be given to the player instead.
-	print(seen_items)
-	while RandomService.randi_channel('item_quality_roll') % 100 < 80 and rarity_goal < Item.Rarity.values().max():
+	#print(seen_items)
+	while RandomService.randi_channel('item_quality_roll') % 100 < 82 and rarity_goal < Item.Rarity.values().max():
 		rarity_goal += 1
 
 	var is_first_roll := true

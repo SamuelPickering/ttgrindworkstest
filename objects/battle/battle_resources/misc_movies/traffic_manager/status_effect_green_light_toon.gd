@@ -51,6 +51,12 @@ func require_random_track() -> void:
 		return
 	RandomService.array_shuffle_channel('true_random', trimmed_list)
 	var new_track : Track = trimmed_list[0]
+	var k = 1
+	while all_cogs_lured() and (new_track.track_name == "Lure" or new_track.track_name == "Trap"):
+		new_track = trimmed_list[k]
+		k+= 1
+		if k >= trimmed_list.size() - 1:
+			break
 	required_tracks[0] = new_track
 	var new_effect := make_banned_effect(new_track.gags)
 	manager.add_status_effect(new_effect)
@@ -70,7 +76,7 @@ func get_description() -> String:
 			desc += required_tracks[i].track_name
 		else: 
 			desc += ", " + required_tracks[i].track_name
-	desc += "will result in harsh retaliation"
+	desc += "will result -12% laff"
 	return desc
 
 func make_banned_effect(gags: Array[ToonAttack]) -> StatusEffect:
@@ -86,7 +92,7 @@ func renew() -> void:
 	require_random_track()
 	if gag_not_used:
 		manager.battle_node.focus_character(target)
-		manager.affect_target(target, Util.get_player().stats.hp * 0.12)
+		manager.affect_target(target, Util.get_player().stats.max_hp * 0.12)
 		if target is Player:
 			target.set_animation('cringe')
 			target.last_damage_source = "3n"
@@ -104,3 +110,18 @@ func on_round_started(actions: Array[BattleAction]) -> void:
 			if not effect.is_banned_gag_used(actions):
 				gag_not_used = true
 				return
+func all_cogs_lured() -> bool:
+	var all_lured := true
+	for cog in manager.cogs:
+		if not cog.lured:
+			all_lured = false
+			break
+	return all_lured
+
+func all_cogs_trapped() -> bool:
+	var all_trapped := true
+	for cog in manager.cogs:
+		if not cog.trap:
+			all_trapped = false
+			break
+	return all_trapped

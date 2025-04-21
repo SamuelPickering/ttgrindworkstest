@@ -40,6 +40,7 @@ signal s_floor_number_changed
 var floor_type : DepartmentFloor
 var window_focused := true
 var battlesonfloor = 0
+var final_boss = false  # NOT BEST PRACTICES BUT IM RELEASING THIS TODAY, ON THIS DAY, TODAY
 var battles_encountered = 0
 var floor_number := -1:
 	set(x):
@@ -190,7 +191,7 @@ func pack_model(file_path : String) -> PackedScene:
 func on_player_died() -> void:
 	get_tree().paused = true
 	# Have save file deleted
-	SaveFileService.on_game_over()
+	#SaveFileService.on_game_over()
 
 	lose_menu = LOSE_MENU.load().instantiate()
 	add_child(lose_menu)
@@ -247,19 +248,31 @@ func make_boss_chests(holder_node: Node3D, pos_node: Node3D) -> void:
 	# 4. A jellybean consumable, if they have less than 20 beans. If they have 20 or more, give a progressive instead
 	if not player:
 		await s_player_assigned
-	var x_points: Array = [-3.75, -1.25, 1.25, 3.75]
+	var x_points: Array = [-3.75, -1.25, 1.25, 3.75,0]
 	var chest_scene: PackedScene = load('res://objects/interactables/treasure_chest/treasure_chest.tscn')
-	for i in range(4):
+	var num
+	if Util.floor_number > 1:
+		num = 5
+	else: num = 4
+	for i in range(num):
 		var chest = chest_scene.instantiate()
 		holder_node.add_child(chest)
-		chest.global_position = pos_node.to_global(Vector3(x_points[i], 0, 0))
+		if not i == 4: 
+			chest.item_pool = load("res://objects/items/pools/progressives.tres")
+			chest.global_position = pos_node.to_global(Vector3(x_points[i], 0, 0))
+		else: chest.global_position = pos_node.to_global(Vector3(x_points[i], 0, 2))
 		chest.global_rotation = pos_node.global_rotation
 		chest.override_replacement_rolls = true
-		chest.item_pool = load("res://objects/items/pools/progressives.tres")
+
 		match i:
 			0:
 				# Give a random super candy
-				chest.override_item = RandomService.array_pick_random('boss_drops', load("res://objects/items/pools/super_candies.tres").items)
+				if Util.floor_number == 0:
+					chest.override_item = load("res://objects/items/resources/passive/candies/candy_super_luck.tres")
+				elif Util.floor_number == 3:
+					chest.override_item = load("res://objects/items/resources/passive/candies/candy_super_damage.tres")
+				else: 
+					chest.override_item = RandomService.array_pick_random('boss_drops', load("res://objects/items/pools/super_candies.tres").items)
 			1:
 				# Give a random track frame
 				chest.override_item = load("res://objects/items/resources/passive/track_frame.tres")
@@ -282,5 +295,7 @@ func make_boss_chests(holder_node: Node3D, pos_node: Node3D) -> void:
 				# Give the player some money if they have less than 10. If they have more, it gives a progressive.
 				if player.stats.money < 10:
 					chest.override_item = RandomService.array_pick_random('boss_drops', load("res://objects/items/pools/jellybeans.tres").items)
+			4:
+				print("5th chest")
 
 #endregion

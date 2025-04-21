@@ -94,8 +94,8 @@ func get_price(world_item: WorldItem) -> int:
 	var mult: float = RandomService.randf_range_channel('shop_item_random', 0.9, 1.1)
 	base_price = max(0, (base_price * mult) - Util.get_player().stats.shop_discount)
 	var price_with_discount := base_price
-	# 20% chance of discount per 1.0 luck stat
-	if RandomService.randf_channel('shop_item_random') < Util.get_player().stats.get_stat('luck') * 0.2:
+	# 20% chance of discount per 1.0 luck stat # 30 now
+	if RandomService.randf_channel('shop_item_random') < Util.get_player().stats.get_stat('luck') * 0.3:
 		price_with_discount *= SHOP_SALE_MULT
 		discounted_items[world_items.find(world_item)] = true
 	return maxi(0, roundi(price_with_discount))

@@ -291,14 +291,14 @@ want_ui_spin = true
 ui_cam_offset = 0.6
 item_name = "Baseball Cap"
 item_description = "Haphazard hucking"
-big_description = "+ 20% Throw damage
-- 7% Throw self heal"
+big_description = "+ 25% Throw damage
+- 5% Throw self heal"
 model = ExtResource("4_7ew81")
 stats_add = {
-"throw_heal_boost": -0.07
+"throw_heal_boost": -0.05
 }
 stats_multiply = {
-"gag_boost:Throw": 1.2
+"gag_boost:Throw": 1.25
 }
 player_values = {}
 arbitrary_data = {}

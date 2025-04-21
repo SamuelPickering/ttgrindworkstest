@@ -91,6 +91,8 @@ func randomize_objective() -> void:
 		quotaf /= 3.0
 	elif specific_cog:
 		quotaf /= 4.0
+	else:
+		quotaf /= 1.15
 	
 	# Level minimum objectives
 	if RandomService.randi_channel('cog_quest_types') % 3 == 0:

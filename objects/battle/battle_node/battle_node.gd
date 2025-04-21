@@ -21,6 +21,7 @@ var state := BattleState.INACTIVE
 @export var override_intro: BattleStartMovie
 @export var item_pool: ItemPool
 @export var boss_battle := false
+@export var rebalance := 0
 
 # Child References
 @onready var battle_cam := $BirdsEye/BattleCamera
@@ -39,24 +40,32 @@ var player_pos: Vector3:
 var mod_cogs := 0
 
 func _ready():
+	print("rebalance: ", rebalance)
 	$ArrowReference.queue_free()
 	
 	for cog: Cog in cogs:
+		if rebalance != 0:
+			var old_effects0 = cog.dna.status_effects
+			cog.ts_pmo = true
+			cog.dna = null
+			var level_add = rebalance + Util.floor_number - 1
+			cog.level_rebalance += rebalance + Util.floor_number - 1
+			#print("line 57 bm TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMOTS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO TS PMO")
+			cog.randomize_cog()
+			if old_effects0.size() >= 1:
+				cog.dna.status_effects.append_array(old_effects0)
 		if RandomService.randf_channel('mod_cog_chance') < get_mod_cog_chance() and not cog.has_forced_dna and not cog.virtual_cog:
-			print("in battle node proxies :")
-			print(cog.dna)
 			var old_effects = cog.dna.status_effects
-			print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 			cog.dna = null
 			mod_cogs += 1
 			cog.use_mod_cogs_pool = true
 			cog.skelecog_chance = 0
 			cog.skelecog = false
+			cog.level_rebalance -= 1
 			cog.randomize_cog()
-			print(cog.dna.status_effects.size())
 			if old_effects.size() >= 1:
 				cog.dna.status_effects.append_array(old_effects)
-			print(cog.dna.status_effects.size())
+
 	
 	BattleService.s_battle_spawned.emit(self)
 
@@ -301,7 +310,7 @@ func get_mod_cog_chance() -> float:
 
 	var floor_num := Util.floor_number
 	#var max_mod_cogs := mini(roundi(floor_num * 0.75), 3)
-	var max_mod_cogs :=  3 * (floor_num + 1)
+	var max_mod_cogs :=  2 * (floor_num + 1)
 	if mod_cogs >= max_mod_cogs:
 		return 0.0
 	
