@@ -6,7 +6,6 @@ const PROXY_BOOST_REFERENCE := preload("res://objects/battle/battle_resources/st
 
 
 func action() -> void:
-	print("in proxy+ is this even running?")
 	var cog: Cog = user
 	apply_boost(cog)
 	
@@ -53,6 +52,5 @@ func apply_boost(cog : Cog) -> void:
 	
 	 # new_boost.rounds = -1 idk if i neeed this or to make it 0
 	new_boost.target = cog
-	print("pluh")
 	
 	manager.add_status_effect(new_boost)

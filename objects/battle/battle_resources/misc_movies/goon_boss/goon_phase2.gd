@@ -21,7 +21,6 @@ func action() -> void:
 		cog.battle_start()
 		cogs.append(cog)
 	assign_gag_immunities(cogs)
-	print(cogs)
 	for cog in cogs:
 		manager.add_cog(cog)
 	battle_node.reposition_cogs()

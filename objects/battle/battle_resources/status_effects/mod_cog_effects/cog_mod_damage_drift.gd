@@ -9,17 +9,17 @@ var battle_ui
 func apply() -> void:
 	var cog: Cog = target
 	var playerturns = Util.get_player().stats.turns
-	print(playerturns)
+	#print(playerturns)
 	battle_ui = manager.battle_ui
 	debuff_turn_index = RandomService.randi_channel('true_random') % playerturns
 	buff_turn_index = RandomService.randi_channel('true_random') % playerturns
-	print(debuff_turn_index, " sec ", buff_turn_index)
-	print("APPLIED DAMAGE DRIFT")
+	#print(debuff_turn_index, " sec ", buff_turn_index)
+	#print("APPLIED DAMAGE DRIFT")
 	if debuff_turn_index not in effectdict : effectdict[debuff_turn_index] = 0.5
 	else: effectdict[debuff_turn_index] = effectdict[debuff_turn_index] * 0.5
 	if buff_turn_index not in effectdict: effectdict[buff_turn_index] = 1.2
 	else: effectdict[buff_turn_index] = effectdict[buff_turn_index] * 1.2
-	print("ui sledected gags? line 15")
+	#print("ui sledected gags? line 15")
 	await Task.delay(0.1)
 	if battle_ui:
 		battle_ui.drift_effect_dict = effectdict
@@ -28,15 +28,15 @@ func apply() -> void:
 
 
 func on_gags_chosen(actions: Array[ToonAttack]) -> void:
-	print("line 20 on damage drift")
+	#print("line 20 on damage drift")
 	if(actions.size() -1 >= debuff_turn_index):
-		print("pre nerf: ", actions[debuff_turn_index].damage,"damage on", actions[debuff_turn_index].action_name)
+		#print("pre nerf: ", actions[debuff_turn_index].damage,"damage on", actions[debuff_turn_index].action_name)
 		actions[debuff_turn_index].damage *= 0.5
-		print("After, ", actions[debuff_turn_index].damage)
+		#print("After, ", actions[debuff_turn_index].damage)
 	if(actions.size() -1 >= buff_turn_index):
-		print("pre buff: ", actions[buff_turn_index].damage,"damage on", actions[buff_turn_index].action_name)
+		#print("pre buff: ", actions[buff_turn_index].damage,"damage on", actions[buff_turn_index].action_name)
 		actions[buff_turn_index].damage *= 1.2
-		print("After, ", actions[buff_turn_index].damage)
+		#print("After, ", actions[buff_turn_index].damage)
 	s_gag_modified.emit([debuff_turn_index, buff_turn_index])
 
 func renew() -> void:

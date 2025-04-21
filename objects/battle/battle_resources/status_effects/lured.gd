@@ -19,8 +19,6 @@ func apply() -> void:
 		manager.skip_turn(cog)
 		cog.stunned = true
 	else:
-		print("in lured.gd: damage nerf:")
-		print(damage_nerf)
 		var stats : BattleStats = manager.battle_stats[cog]
 		stats.damage *= damage_nerf
 	
@@ -36,20 +34,16 @@ func expire() -> void:
 	if lure_type == LureType.DAMAGE_DOWN:
 		manager.battle_stats[target].damage *= (1 / damage_nerf)
 	else:
-		print("manager.bellow: " )
 		if manager.bellow and target.stunned:
 			target.stunned = false
-			print(" in lured gd  41 BELLLOW?!!!!!!!!!")
 			var attack = manager.get_cog_attack(target)
 			manager.append_action(attack)
 			return
 		if target.stunned:
 			target.stunned = false
 			manager.unskip_turn(target)
-			print("in lured, ARE U TELLING ME THIS DOESN'T RUN?")
 			await manager.run_actions()
-			print("in lured, bruh there aint no way")
-		print("idk bro")
+
 		
 
 func ts_pmo() -> void:

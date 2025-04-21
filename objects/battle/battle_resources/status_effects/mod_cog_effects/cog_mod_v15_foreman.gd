@@ -6,12 +6,10 @@ extends StatusEffect
 
 func apply() -> void:
 	var cog: Cog = target
-	print("Appied v15 Foreman")
-	# add sound immunity
+	#print("Appied v15 Foreman")
 	
 
 func on_death() -> void:
-	print("running on line 14 in v15_foreman")
 	manager.create_v1_5_skele_cog(target)
 	
 

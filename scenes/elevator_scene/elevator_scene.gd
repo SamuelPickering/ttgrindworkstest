@@ -82,11 +82,10 @@ func get_next_floors() -> void:
 		new_floor.randomize_details()
 		while not new_floor.reward or new_floor.reward.item_name in taken_items:
 			new_floor.randomize_item()
-		if Util.floor_number >= 3: new_floor.floor_name = "Fight The Foremen"
+		if Util.floor_number >= 3: new_floor.floor_name = "Overclocked Fight The Foremen"
 		next_floors.append(new_floor)
 		taken_items.append(new_floor.reward.item_name)
 	add_more_floors(floor_variants)
-	print(next_floors)
 	$ElevatorUI.floors = next_floors
 	$ElevatorUI.set_floor_index(0)
 
@@ -106,7 +105,7 @@ func add_more_floors(floor_variants) -> void:
 		var new_floor: FloorVariant = Util.universal_load(FLOOR_VARIANT_PATH + random_floor).duplicate()
 		var anom_array = new_floor.get_green_light_anomaly()
 		new_floor.scripted_details(anom_array)
-		if Util.floor_number >= 3: new_floor.floor_name = "Fight The Foremen"
+		if Util.floor_number >= 3: new_floor.floor_name = " Overclocked Fight The Foremen"
 		while not new_floor.reward:
 			new_floor.randomize_item()
 		next_floors.append(new_floor)
@@ -120,7 +119,7 @@ func add_gag_immune_floor(floor_variants) -> void:
 		var new_floor: FloorVariant = Util.universal_load(FLOOR_VARIANT_PATH + random_floor).duplicate()
 		var anom_array = new_floor.get_gag_immunity_anomaly()
 		new_floor.scripted_details(anom_array)
-		if Util.floor_number >= 3: new_floor.floor_name = "Fight The Foremen"
+		if Util.floor_number >= 3: new_floor.floor_name = "Overclocked Fight The Foremen"
 		while not new_floor.reward:
 			new_floor.randomize_item()
 		next_floors.append(new_floor)
@@ -148,7 +147,7 @@ func add_reorg_floor(floor_variants) -> void:
 		var new_floor: FloorVariant = Util.universal_load(FLOOR_VARIANT_PATH + random_floor).duplicate()
 		var anom_array = new_floor.get_reorg_anomaly()
 		new_floor.scripted_details(anom_array)
-		if Util.floor_number >= 3: new_floor.floor_name = "Fight The Foremen"
+		if Util.floor_number >= 3: new_floor.floor_name = "Overclocked Fight The Foremen"
 		while not new_floor.reward:
 			new_floor.randomize_item()
 		next_floors.append(new_floor)
@@ -157,7 +156,7 @@ func add_positive_floor(floor_variants) -> void:
 		var new_floor: FloorVariant = Util.universal_load(FLOOR_VARIANT_PATH + random_floor).duplicate()
 		var anom_array = new_floor.all_positive_anomalies()
 		new_floor.scripted_details(anom_array)
-		if Util.floor_number >= 3: new_floor.floor_name = "Survive The Foremen"
+		if Util.floor_number >= 3: new_floor.floor_name = "Overclocked Fight The Foremen"
 		while not new_floor.reward:
 			new_floor.randomize_item()
 		next_floors.append(new_floor)

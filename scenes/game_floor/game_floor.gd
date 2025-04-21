@@ -102,11 +102,8 @@ func generate_floor() -> void:
 	else: battle_ratio = 0.4 + (0.1 * float(RandomService.randi_channel('battle_ratio') % 3))
 	var total_rooms = int((room_count - 2) / 2)
 	var total_battles := int(total_rooms * battle_ratio)
-	print("in game floor.gd")
-	print("floor num", Util.floor_number)
-	print("battle ratio: ", battle_ratio)
-	print("total rooms: ", total_rooms)
-	print("total batlles:", total_battles)
+	#print("battle ratio: ", battle_ratio)
+	#print("total batlles:", total_battles)
 	rooms_remaining = [total_battles, total_rooms - total_battles]
 
 	if floor_rooms.special_rooms and RandomService.randf_channel('room_logic') > 0.001: # was 0.8 guarantted special room

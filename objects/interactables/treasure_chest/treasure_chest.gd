@@ -61,7 +61,6 @@ func assign_item(world_item: WorldItem):
 		world_item.item = scripted_item
 		return
 	if scripted_rebalance:
-		print("Scripted Rebalance!")
 		if Util.floor_number == 0:
 			world_item.item = load("res://objects/items/resources/accessories/glasses/monocle.tres")
 			return

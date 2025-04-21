@@ -13,12 +13,11 @@ func apply() -> void:
 
 func on_actions_end() -> void:
 	return
-	print("SHOULD NOT BE RAN RIGHT WNOW larynx")
+	print("SHOULD NOT BE RAN RIGHT NOW larynx")
 	var iterator = 0
 	var status_effects = manager.status_effects.duplicate()
 	for status_effect: StatusEffect in status_effects:
 		if status_effect.target is Cog and status_effect.quality == 1:
-			print(status_effect.get_description())
 			await manager.expire_status_effect(status_effect)
 
 func cleanup() -> void:
@@ -29,7 +28,7 @@ func renew() -> void:
 	bellow_attack.targets = [target]
 	manager.append_end_action(bellow_attack)
 	Task.delay(0.05)
-	print(manager.round_end_actions)
+	#print(manager.round_end_actions)
 	
 
 func get_status_name() -> String:

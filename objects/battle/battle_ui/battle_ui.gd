@@ -133,7 +133,7 @@ func complete_turn():
 func sort_gags(gags: Array[ToonAttack]) -> Array[ToonAttack]:
 	if Util.get_player().custom_gag_order:
 		return gags
-	print("battle ui line 132")
+	#print("battle ui line 132")
 	if(gag_order_menu.panels):
 		#gag_order_menu.panels[0].color = (Color(0.867, 0.627, 0.867))
 		var panel1 = gag_order_menu.panels[0]

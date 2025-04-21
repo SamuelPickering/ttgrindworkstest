@@ -243,7 +243,7 @@ func scripted_details(anomaly_array) -> void:
 	if floor_difficulty == 3: room_count = room_count * 1.2
 	if room_count % 2 == 0:
 		room_count += 1
-	print("FLOOR 3 MMMARAAAARTON")
+	#print("FLOOR 3 MMMARAAAARTON")
 	
 	# Get the default Cog Pool if none specified
 	if not cog_pool:

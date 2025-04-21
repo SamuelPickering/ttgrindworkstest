@@ -87,7 +87,7 @@ func try_add_cogs(_actions: Array[BattleAction]) -> void:
 			new_reinforcements.user = self
 			BattleService.ongoing_battle.round_end_actions.append(new_reinforcements)
 	else:
-		print("in penthouse line 90, ELEVATOR COOLDOWN: ", elevator_cooldown)
+		#print("in penthouse line 90, ELEVATOR COOLDOWN: ", elevator_cooldown)
 		if should_spawn_foreman():
 			var new_reinforcements := ElevatorReinforcements.new()
 			new_reinforcements.user = self
@@ -104,7 +104,7 @@ func participant_died(who: Node3D) -> void:
 	elif who is Cog: #foreman
 		if elevator_cooldown < 2:
 			elevator_cooldown += 1
-		print("stuff")
+		#print("stuff")
 
 func battle_ending() -> void:
 	Util.get_player().game_timer_tick = false
@@ -186,7 +186,7 @@ func both_bosses_alive() -> bool:
 	return boss_one_alive and boss_two_alive
 
 func should_spawn_foreman() -> bool:
-	print("in penthouse, line 189 curr round: ", BattleService.ongoing_battle.current_round)
+	#print("in penthouse, line 189 curr round: ", BattleService.ongoing_battle.current_round)
 	#always on round 2
 	if BattleService.ongoing_battle.current_round == 1:
 		return true

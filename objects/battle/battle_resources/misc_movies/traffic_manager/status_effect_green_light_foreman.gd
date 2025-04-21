@@ -64,7 +64,7 @@ func get_description() -> String:
 			desc += required_tracks[i].track_name
 		else: 
 			desc += ", " + required_tracks[i].track_name
-	desc += "will result in harsh retaliation"
+	desc += "will result in retaliation"
 	return desc
 
 func make_banned_effect(gags: Array[ToonAttack]) -> StatusEffect:
@@ -77,7 +77,6 @@ func make_banned_effect(gags: Array[ToonAttack]) -> StatusEffect:
 	return banned_effect
 func renew() -> void:
 	round+= 1
-	#print("RENEWING GREEN LIGHT SHOT")
 	require_random_track()
 func on_round_started(actions: Array[BattleAction]) -> void:
 	if rounds == 0:

@@ -46,8 +46,8 @@ func _refresh_cogs() -> void:
 	else:
 		if  Util.floor_number == 4 and Util.battlesonfloor == 0:
 			#cog_count = 2
+			#Make  first battle in FTF always 2 cogs
 			cog_count = 2
-			print("FIRST BATTLE ON FLOOR 4 Foreman")
 			
 		else: cog_count = RandomService.randi_range_channel("cog_counts", cog_range.x, cog_range.y)
 	Util.battlesonfloor += 1
@@ -86,9 +86,8 @@ func rebalance_cogs(cog, cog_count) -> void:
 	if Util.floor_number == 4:
 		cog.foreman = true
 		if cog_count == 2:
-			print(cog.level)
 			if Util.battlesonfloor > 1:  cog.level_rebalance += 3
-			print("Rebalancing group of 2 cogs +3 levels to cog")
+			#print("Rebalancing group of 2 cogs +3 levels to cog")
 	if Util.floor_number <= 3:
 		if cog_count <= 2:
 			cog.level_rebalance += Util.floor_number

@@ -13,17 +13,12 @@ func apply() -> void:
 
 func on_toon_heal(health : int) -> void:
 	if(health > last_player_hp):
-		print("PLAYER MUST HAS HEALED BENE")
 		var hp_ratio = float(health - last_player_hp) / player.stats.max_hp
-		print("hp ratio: ", hp_ratio)
 		if target.stats.hp > 0:
 			target.stats.hp = target.stats.hp + (max(target.stats.max_hp, target.stats.hp) * (hp_ratio * heal_multiplier))
-		print(max(target.stats.max_hp, target.stats.hp) * (hp_ratio * heal_multiplier))
-		print("cogs hp: ", target.stats.hp)
 	else:
-		print("got damaged imao by: ", health - last_player_hp)
+		print("got damaged oof: ", health - last_player_hp)
 	last_player_hp = health
-	print("new last player hp: ", last_player_hp)
 	
 
 func cleanup() -> void:

@@ -71,7 +71,6 @@ func action():
 				manager.affect_target(target, real_damage)
 			if not target.lured or not do_knockback:
 				if not get_immunity(target):
-					print("if immune in sound.gd this should run")
 					target.set_animation('squirt-small')
 			elif not get_immunity(target):
 				manager.knockback_cog(target)

@@ -40,7 +40,6 @@ var player_pos: Vector3:
 var mod_cogs := 0
 
 func _ready():
-	print("rebalance: ", rebalance)
 	$ArrowReference.queue_free()
 	
 	for cog: Cog in cogs:
@@ -317,7 +316,6 @@ func get_mod_cog_chance() -> float:
 	var chance := (floor_num * 0.075 * 1.5)
 	if Util.get_player() and not is_equal_approx(Util.get_player().stats.proxy_chance_boost, 0.0):
 		chance += Util.get_player().stats.proxy_chance_boost
-	print("are proxies a thing?", chance)
 	return chance
 
 

@@ -15,7 +15,6 @@ func apply() -> void:
 func on_action_start(action : BattleAction) -> void:
 	if action.user == target:
 		self.visible = true
-		print("in overchaged: ", action.damage)
 		if target.stats.hp >= target.stats.max_hp * 1.49:
 			action.damage = action.damage *1.5
 		else:

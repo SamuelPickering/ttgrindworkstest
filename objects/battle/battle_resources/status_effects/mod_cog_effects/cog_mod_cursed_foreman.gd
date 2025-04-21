@@ -6,17 +6,15 @@ const Curse_Status_Reference := preload("res://objects/battle/battle_resources/s
 
 func apply() -> void:
 	var cog: Cog = target
-	print("Appied Cursed Foreman")
-	# add sound immunity
+	#print("Appied Cursed Foreman")
+
 	
 
 func on_death() -> void:
-	print("running on line 14 in cursed_foreman")
 	var status_effect := Curse_Status_Reference.duplicate()
 	status_effect.target = Util.get_player()
 	status_effect.track_name = target.last_damage_source
-	status_effect.rounds = 2
-	print("the track cursed:", status_effect.track_name)
+	status_effect.rounds = 1
 	manager.add_status_effect(status_effect)
 
 

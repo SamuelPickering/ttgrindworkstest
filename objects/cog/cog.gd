@@ -35,7 +35,7 @@ var attacks : Array[CogAttack]
 @export var skelecog := false # CHANGE TO TRUE AFTER DEMO
 @export var skelecog_chance := 10
 @export var fusion := false
-@export var foreman := true #change to TRUE
+@export var foreman := false #change to TRUE
 @export var fusion_chance := 0
 @export var virtual_cog := false
 @export var techbot := false #change to TRUE
@@ -120,7 +120,6 @@ func face_position(pos: Vector3):
 		rotate_y(deg_to_rad(180))
 
 func randomize_cog() -> void:
-	print("cogs rebalance in cog.gd line 122 : ", level_rebalance)
 	roll_for_attributes()
 	#if dna: print(dna.status_effects)
 	#print("after roll for att")
@@ -187,9 +186,7 @@ func roll_for_level() -> void:
 		elif dna: 
 			custom_level_range = Vector2i(dna.level_low, dna.level_high)
 		level = RandomService.randi_range_channel('cog_levels', custom_level_range.x, custom_level_range.y)
-		print("level pre re balance line: ", level, level_rebalance)
 		level += level_rebalance
-		print("level after rebalance line: ", level)
 	#if level <= 9: level = level + 3 I added this crap, removing it
 	# Allow for Cogs to be higher level than the floor intends
 	if sign(level_range_offset) == 1:
@@ -280,7 +277,6 @@ func set_up_stats() -> void:
 	#if not dna.is_mod_cog: dna.scale *= randf_range(1, 1.6)
 	dna.scale *= randf_range(1, 1.6)
 
-	print(new_text)
 	if foreman: body.set_color(Color(0.867, 0.627, 0.867))
 	if dna.custom_nametag_suffix: new_text += '\n%s' % dna.custom_nametag_suffix
 	body.nametag.text = new_text
@@ -456,7 +452,6 @@ func get_attack() -> CogAttack:
 		if attacks.size() == 0:
 			return get_debug_attack()
 		var special_attack_gate = 1 if special_attack else 0
-		print("line 453: ", special_attack_gate)
 		#var smash
 		var bruh
 		if foreman: bruh = RandomService.randi_channel('true_random') % (attacks.size() - 1 - special_attack_gate)
@@ -478,8 +473,6 @@ func get_attack() -> CogAttack:
 			print("tabulate and foreman")
 		if foreman and special_attack:
 			# There is a better way to do but rn idc
-			print(attack.action_name)
-			print("finna heal")
 			stats.is_foreman = true
 			attack.action_name = "Worker's Compensation"
 			attack.summary = "Foreman recieves and damage and health bonus"

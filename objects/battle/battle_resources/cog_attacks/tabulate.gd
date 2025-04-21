@@ -9,14 +9,13 @@ const SFX := preload("res://audio/sfx/battle/cogs/attacks/SA_audit.ogg")
 #My lazy ahh adding ts instead of making a new cog attack %5
 const STAT_BOOST_REFERENCE := preload("res://objects/battle/battle_resources/status_effects/resources/status_effect_stat_boost.tres")
 var foreman_attack_boost = 1.25
-@export var play_sound := true
+@export var play_sound := false
 @export var textarr = ["Damage up boy", "OVERCHARGED"]
 
 func action():
 	self.accuracy = Globals.ACCURACY_GUARANTEE_HIT
 	var hit := manager.roll_for_accuracy(self)
 	if self.action_name == "Worker's Compensation": apply()
-	print("self foreman user in action() tabulate line 13")
 	var target = targets[0]
 	user.face_position(target.global_position)
 	var calculator : Node3D = CALCULATOR.instantiate()
@@ -39,10 +38,11 @@ func action():
 	#tween.tween_interval(3.0)
 	#
 	
-	# Play sound
+	# Play sound, nope
 	await manager.sleep(0.4)
 	if play_sound:
-		AudioManager.play_sound(SFX)
+		if self.action_name != "Worker's Compensation":
+			AudioManager.play_sound(SFX)
 	
 	manager.s_focus_char.emit(target)
 	if hit:

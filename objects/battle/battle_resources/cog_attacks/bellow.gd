@@ -27,7 +27,3 @@ func action() -> void:
 			await manager.sleep(0.7)
 	#await manager.sleep(3.0)
 	manager.bellow = false
-
-
-func create_debuff() -> void:
-	print("idk")

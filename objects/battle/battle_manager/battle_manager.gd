@@ -93,7 +93,7 @@ func start_battle(cog_array: Array[Cog], battlenode: BattleNode):
 	s_ui_initialized.emit()
 
 func _on_gag_modified(indexes: Array) -> void:
-	print("Gag modified by Damage Drift:", indexes)
+	#print("Gag modified by Damage Drift:", indexes)
 	s_gag_modified.emit(indexes) 
 
 func append_action(action: BattleAction):
@@ -105,7 +105,6 @@ func gags_selected(gags: Array[ToonAttack]):
 	s_gags_chosen.emit(gags)
 	battle_ui.gag_order_menu.clear_panel_effects()
 	for gag in gags:
-		print(gag.damage)
 		append_action(gag)
 	begin_turn()
 
@@ -131,7 +130,6 @@ func begin_turn():
 			var attack := get_cog_attack(cog)
 			if not attack == null:
 				if cog.techbot:
-					print("techy")
 					inject_battle_action(attack, 0)
 				else: append_action(attack)	
 
@@ -298,7 +296,6 @@ func end_battle() -> void:
 			chest.global_position = battle_node.global_position
 			#chest2.global_position = battle_node.global_position
 			#chest2.global_position += Vector3(0, 0, 1.5)
-			print("CHEST POSITION AFTER BATTLE in bm 298:", chest.global_position)
 			chest.global_rotation = battle_node.global_rotation
 			#chest2.global_rotation = battle_node.global_rotation
 			#chest2.item_pool = load(ITEM_POOL_PROGRESSIVES)
@@ -309,7 +306,7 @@ func end_battle() -> void:
 			else:
 				chest.item_pool = battle_node.item_pool
 			chest.override_replacement_rolls = RandomService.randi_channel('true_random') % 2 == 0		
-			if start_cog_size >= 4:
+			if start_cog_size >= 4 and Util.floor_number < 4:
 				extra_chest()
 			#chest2.override_replacement_rolls = RandomService.randi_channel('true_random') % 2 == 0
 	# Reset player & partners as persistent nodes
@@ -516,14 +513,14 @@ func get_damage(damage: float, action: BattleAction, target: Node3D) -> int:
 			current_round_combo_data[target] = {}
 			if not gag_type in current_round_combo_data[target]:
 				current_round_combo_data[target][gag_type] = boosted_damage
-				print("FIRST TIME HIT WITH ANYTHING ", gag_type)
+				#print("FIRST TIME HIT WITH ANYTHING ", gag_type)
 		else:
 				if not gag_type in current_round_combo_data[target]:
 					current_round_combo_data[target][gag_type] = boosted_damage
-					print("WAS ATTACKED BEFORE BUT WITH A DIFFERENT GAG THEN ", gag_type)
+					#print("WAS ATTACKED BEFORE BUT WITH A DIFFERENT GAG THEN ", gag_type)
 				else:
 					current_round_combo_data[target][gag_type] += boosted_damage
-					print("THERE WOULD HAVE BEEN COMBO DAMAGE OF: ", current_round_combo_data[target][gag_type] * 0.2)
+					#print("THERE WOULD HAVE BEEN COMBO DAMAGE OF: ", current_round_combo_data[target][gag_type] * 0.2)
 					do_combo_damage(target,current_round_combo_data[target][gag_type], gag_type )
 					
 					
@@ -617,7 +614,7 @@ func get_statuses_of_id_for_target(target: Node3D, id: int) -> Array[StatusEffec
 func add_status_effect(status_effect: StatusEffect) -> void:
 	if status_effect.target is Cog:
 		if status_effect.target.v1_5 and status_effect.quality == 1:
-			print("v1_5 is immune")
+			#print("v1_5 is immune")
 			return
 	if attempt_to_combine(status_effect, get_repeat_status_effects(status_effect)):
 		return
@@ -733,13 +730,12 @@ func unskip_turn(who: Actor) -> void:
 		if bellow:
 			for i in who.stats.turns:
 				append_action(get_cog_attack(who))
-			print("bellow in unskip")
 			return
 		var action_index : int
 		for i in round_actions.size():
 			if cog_index > 0 and round_actions[i].user == cogs[cog_index - 1]:
 				action_index = i + 1
-				print("route 1 in unskip target")
+				#print("route 1 in unskip target")
 				break
 			# NOTE: This may need to change later(?)
 			# All current battle participants extend the Actor class
@@ -747,19 +743,19 @@ func unskip_turn(who: Actor) -> void:
 			# Meaning it's currently ok to assume that non-actor moves should come last
 			elif (cog_index < cogs.size() -1 and round_actions[i].user == cogs[cog_index + 1]) or not round_actions[i].user is Actor:
 				action_index = i
-				print("route 2 in unskip target")
+				#print("route 2 in unskip target")
 				break
 		if action_index:
 			for i in who.stats.turns:
 				inject_battle_action(get_cog_attack(who), action_index)
 				has_moved.append(who)
-				print("route 3 in unskip target")
+				#print("route 3 in unskip target")
 		else:
 			# Failsafe
 			for i in who.stats.turns:
 				append_action(get_cog_attack(who))
 				has_moved.append(who)
-				print("route 4 in unskip target")
+				#print("route 4 in unskip target")
 
 func get_cog_attack(cog: Cog) -> CogAttack:
 	var cog_attack : CogAttack
@@ -891,7 +887,7 @@ func create_v1_5_skele_cog(cog: Cog) -> Cog:
 	return new_cog
 	
 func inject_end_battle_action(battle_action : BattleAction,position : int):
-		print("Action injected in end rounds")
+		#print("Action injected in end rounds")
 		round_end_actions.insert(position,battle_action)
 		s_action_added.emit(battle_action)
 
@@ -925,11 +921,10 @@ func force_unlure_foreman (target: Cog) -> void:
 			lure_effect.target = null
 
 func crowd_control(cog: Cog) -> void:
-	print("doing sound crowd control")
-	print(cog.foreman)
+	#print("doing sound crowd control")
+	#print(cog.foreman)
 	
 	#await sleep(0.05)
-	
 	cog.special_attack = true
 	var attack := get_cog_attack(cog)
 	cog.special_attack = false
@@ -948,10 +943,7 @@ func extra_chest():
 			chest3.global_position = battle_node.global_position
 			#chest2.global_position = battle_node.global_position
 			chest3.global_position += Vector3(0, 0, 1.5)
-			print("CHEST3 POSITION AFTER BATTLE in bm 949:", chest3.global_position)
 			chest3.global_rotation = battle_node.global_rotation
-			#chest2.global_rotation = battle_node.global_rotation
-			#chest2.item_pool = load(ITEM_POOL_PROGRESSIVES)
 			player.boost_queue.queue_text("4 Cog Bounty!", Color.GREEN)
 			if player.better_battle_rewards == true and current_round <= 2:
 				chest3.item_pool = load(ITEM_POOL_PROGRESSIVES)

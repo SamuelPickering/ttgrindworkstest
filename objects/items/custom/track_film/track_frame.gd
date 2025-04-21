@@ -44,13 +44,12 @@ func get_better_track() -> void:
 	if Util.floor_number == 3:
 		if Util.battlesonfloor > 3 and loadout['Throw'] < 5:
 			track = 'Throw'
-			print("forced Throw")
 			return
+	#trade sound for lowest gag bc of foremen
 	if Util.floor_number >= 3:
 		if track == "Sound" and loadout["Sound"] >= 5:
 			var lowest_gag = get_min_gag_unlocked()
 			if lowest_gag != "":
-				print("traded sound frame for lowest gag")
 				track = lowest_gag
 
 
@@ -63,7 +62,7 @@ func get_min_gag_unlocked() -> String:
 		if current_value < min_value:
 			min_value = current_value
 			min_key = key
-	print(" track frame 62: minimum gag: ", min_key)
+	#print(" track frame 62: minimum gag: ", min_key)
 	return min_key
 	
 	return min_key			

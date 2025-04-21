@@ -21,26 +21,23 @@ func setup() -> void:
 func on_action_started(action: BattleAction) -> void:
 	if action is CogAttack and action.ActionTarget.SELF:
 		if Util.get_player().stats.hp == Util.get_player().stats.max_hp:
-			print("pre multiscale: ", action.damage)
 			action.damage = action.damage * 0.50
-			print("post multiscale: ", action.damage)
 			action.store_boost_text("Multiscale!", Color(0.466, 0.663, 0.935))
 		if not_hit:
 			action.damage = action.damage * 0.8
-			print("reduced first hit damage")
 			action.store_boost_text("Multiscale!", Color(0.466, 0.663, 0.935))
-		print("tis cog attack")
 		last_player_hp = Util.get_player().stats.hp
-		print(action.damage)
+
 
 
 func on_battle_ending(manager: BattleManager) -> void:
-	print("in battle ending")
+	#print("in battle ending")
+	pass
 
 func refresh_multiscale() -> void:
 	last_player_hp = Util.get_player().stats.hp
 	not_hit = true
-	print("reseting multi,", not_hit)
+	#print("reseting multi,", not_hit)
 	
 
 func on_toon_hp_change(health : int) -> void:

@@ -18,10 +18,10 @@ func on_status_added(status : StatusEffect) -> void:
 		var hp_healed = 0
 		if target.stats.hp > 0:
 			hp_healed = target.stats.max_hp * 0.1
-			target.stats.hp += hp_healed
+			#target.stats.hp += hp_healed
 		await manager.sleep(1)
 		manager.battle_text(target, "+ 20% defense")
-		if(hp_healed > 0):
+		if(hp_healed > 0 and 2 > 4): #making it guaranted false for now but edit this functionality later
 			await manager.sleep(0.3)
 			manager.battle_text(target,"+ " + str(hp_healed),Color(0, 1, 0, 1), Color(0, 1, 0, 1))
 		description = "This cog's defense increases when inflicted with a debuff." +"\n" + "The foreman defense is currently increased by %d%%!" % defgain
